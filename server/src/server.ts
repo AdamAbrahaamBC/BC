@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import dotenv from "dotenv"
 
 class Server {
@@ -8,6 +9,7 @@ class Server {
     this.app = express();
     this.config();
     //this.routes();
+    this.database();
   }
 
   public config(): void {
@@ -18,6 +20,30 @@ class Server {
     //this.app.use(compression());
     //this.app.use(cors());
   }
+
+  private database() {
+    const connection = mongoose.connection;
+
+    connection.on("connected", () => {
+      console.log("Database connected");
+    });
+
+    connection.on("disconnected", () => {
+      console.log("Database disconnected");
+    });
+
+    const run = async () => {
+      await mongoose.connect(process.env.MONGODB_URI, {
+        keepAlive: true,
+        useNewUrlParser: true,
+        useFindAndModify: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+      });
+    };
+    run().catch(error => console.error(error));
+  }
+
 
   public start(): void {
     this.app.listen(this.app.get("port"), () => {
