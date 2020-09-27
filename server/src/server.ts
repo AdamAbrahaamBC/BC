@@ -1,28 +1,38 @@
 import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
+import cors from 'cors'
+import bodyParser from 'body-parser';
+
+import { AuthRoutes } from "./routes/authRoutes";
 
 class Server {
-  public app: express.Application
+  public app: express.Express;
 
   constructor() {
-    this.app = express()
-    this.config()
-    //this.routes()
-    this.database()
+    this.app = express();
+    this.config();
+    this.routes()
+    this.database();
   }
 
   public config(): void {
-    this.app.set("port", 3000)
-    this.app.use(express.json())
-    this.app.use(express.urlencoded({ extended: false }))
+    this.app.set("port", 3000);
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(bodyParser.urlencoded({ extended: true }))
+    this.app.use(bodyParser.json())
     dotenv.config()
     //this.app.use(compression());
-    //this.app.use(cors());
+    this.app.use(cors());
   }
 
-  private database() {
-    const connection = mongoose.connection
+  public routes(): void {
+    this.app.use("/api/auth", new AuthRoutes().router)
+  }
+
+  public database(): void {
+    const connection = mongoose.connection;
 
     connection.on("connected", () => {
       console.log("Database connected")

@@ -1,6 +1,7 @@
 import { Document, Schema, Model, model, Error } from "mongoose"
 
 export interface IVersion extends Document {
+  _id: number
   number: number
   slides: string[]
 }
