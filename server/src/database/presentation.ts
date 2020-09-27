@@ -2,7 +2,8 @@ import { Document, Schema, Model, model, Error } from "mongoose"
 import { IVersion } from "./version"
 
 export interface IPresentation extends Document {
-  name: string;
+  _id: number
+  name: string
   description: string
   versions: IVersion[]
 }

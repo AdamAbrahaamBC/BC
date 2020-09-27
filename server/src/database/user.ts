@@ -2,6 +2,7 @@ import { Document, Schema, Model, model, Error } from "mongoose"
 import { IPresentation } from "./presentation"
 
 export interface IUser extends Document {
+  _id: number
   email: string
   password: string
   presentations: IPresentation[]
