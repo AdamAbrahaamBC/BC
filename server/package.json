@@ -4,8 +4,8 @@
   "description": "server pre bakalársku prácu",
   "main": "src/server.ts",
   "scripts": {
-    "start": "nodemon -x ts-node ./src/server.ts",
-    "dev": "nodemon",
+    "dev": "nodemon -x ts-node ./src/server.ts",
+    "start": "nodemon",
     "build": "tsoa spec-and-routes && tsoa swagger && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

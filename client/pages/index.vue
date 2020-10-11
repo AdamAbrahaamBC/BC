@@ -1,17 +1,27 @@
 <template>
   <section class="section">
-    <b-button>{{ title }}</b-button>
+    <b-button @click="logout">
+      logout
+    </b-button>
   </section>
 </template>
 
 <script lang="ts">
-import { ref } from "@nuxtjs/composition-api";
+import { defineComponent, useContext } from '@nuxtjs/composition-api'
 
-export default {
-  setup() {
-    const title = ref("Hello Type safety world!");
+export default defineComponent({
+  setup () {
+    const { app } = useContext()
 
-    return { title };
-  },
-};
+    function logout (): void {
+      app.$auth.logout().then(() => {
+        app.router?.push('/login')
+      })
+    }
+
+    return {
+      logout
+    }
+  }
+})
 </script>

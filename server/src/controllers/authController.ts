@@ -17,6 +17,8 @@ export class AuthController {
       bcrypt.hash(req.body.password, saltRounds).then((hash) => {
         const newUser: IUser = new User({
           email: req.body.email,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
           password: hash,
           presentations: []
         })
