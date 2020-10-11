@@ -4,12 +4,16 @@ import { IPresentation } from "./presentation"
 export interface IUser extends Document {
   _id: number
   email: string
+  firstName: string
+  lastName: string
   password: string
   presentations: IPresentation[]
 }
 
 export const userSchema: Schema = new Schema({
   email: String,
+  firstName: String,
+  lastName: String,
   password: String,
   presentations: Array
 })
