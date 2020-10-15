@@ -1,9 +1,36 @@
 <template>
-  <section class="section">
-    <b-button @click="logout">
-      logout
-    </b-button>
-  </section>
+  <div>
+    <h1 class="title">
+      Your presentations:
+    </h1>
+
+    <div class="columns is-multiline">
+      <div class="column is-4-desktop is-6-tablet is-12-mobile">
+        <div class="box has-background-secondary presentation-card">
+          <div class="columns is-centered is-vcentered mx-0 my-0" style="height: 100%">
+            <b-button
+              size="is-large"
+              icon-left="plus-box"
+              type="is-blue"
+              outlined
+            >
+              New!
+            </b-button>
+          </div>
+        </div>
+      </div>
+      <div class="column is-4-desktop is-6-tablet is-12-mobile">
+        <div class="box has-background-secondary presentation-card">
+          asd
+        </div>
+      </div>
+      <div class="column is-4-desktop is-6-tablet is-12-mobile">
+        <div class="box has-background-secondary presentation-card">
+          asd
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -25,3 +52,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+  .presentation-card {
+    height: 45vh !important;
+  }
+</style>
