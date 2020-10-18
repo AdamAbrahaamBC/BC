@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { IUser, User } from "../database/user";
+import { User } from "../database/user";
+import { IUser } from "../models/userModels";
 import bcrypt from 'bcrypt';
 
 const saltRounds: number = 10

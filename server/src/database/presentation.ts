@@ -1,17 +1,9 @@
-import { Document, Schema, Model, model, Error } from "mongoose"
-import { IVersion } from "./version"
-
-export interface IPresentation extends Document {
-  _id: number
-  name: string
-  description: string
-  versions: IVersion[]
-}
+import { Schema, Model, model } from "mongoose"
+import { IPresentation } from "../models/presentationModels";
 
 export const presentationSchema: Schema = new Schema({
-  name: String,
-  description: String,
-  version: Array
+  title: String,
+  versions: Array
 })
 
 export const Presentation: Model<IPresentation> = model<IPresentation>("Presentation", presentationSchema)
