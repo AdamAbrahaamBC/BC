@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../database/user";
 import { IUser } from "../models/userModels";
 import bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 const saltRounds: number = 10
 
@@ -36,7 +37,7 @@ export class AuthController {
 
   public async login(req: Request, res: Response): Promise<void> {
     try {
-      const user = await User.findOne({ email: req.body.email })
+      const user: IUser = await User.findOne({ email: req.body.email })
       if (!user) {
         res.status(404).json("User not found!")
         return
@@ -48,7 +49,9 @@ export class AuthController {
           return
         }
 
-        res.status(200).json(user)
+        const token = jwt.sign({ userId: user.id }, process.env.ACCESS_TOKEN_SECRET)
+
+        res.status(200).json({ token })
       });
     } catch {
       res.status(500)
