@@ -5,6 +5,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser';
 
 import { AuthRoutes } from "./routes/authRoutes";
+import { UserRoutes } from "./routes/userRoutes";
 
 class Server {
   public app: express.Express;
@@ -29,6 +30,7 @@ class Server {
 
   public routes(): void {
     this.app.use("/api/auth", new AuthRoutes().router)
+    this.app.use("/api/user", new UserRoutes().router)
   }
 
   public database(): void {
