@@ -82,14 +82,15 @@ export default defineComponent({
       }
 
       state.isLoading = true
-      await app.$auth.loginWith('local', { data: state.userData }).then((response) => {
-        app.$auth.setUser(response.data)
-        app.router?.push('/')
-      }).catch((error: ApiErrorResponse) => {
-        state.error = error.response.data
-      }).finally(() => {
-        state.isLoading = false
-      })
+      await app.$auth.loginWith('local', { data: state.userData })
+        .then(() => {
+          app.router?.push('/')
+        })
+        .catch((error: ApiErrorResponse) => {
+          state.error = error.response.data
+        }).finally(() => {
+          state.isLoading = false
+        })
     }
 
     return {

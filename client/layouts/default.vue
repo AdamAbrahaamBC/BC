@@ -13,7 +13,7 @@
                 outlined
                 class="level-right"
                 icon-left="logout"
-                @click="logout"
+                @click="$auth.logout()"
               >
                 <h2 class="subtitle has-text-blue">
                   Logout !
@@ -39,14 +39,8 @@ export default defineComponent({
   setup () {
     const { app } = useContext()
 
-    function logout (): void {
-      app.$auth.logout()
-      app.router?.push('/login')
-    }
-
     return {
-      app,
-      logout
+      app
     }
   }
 })

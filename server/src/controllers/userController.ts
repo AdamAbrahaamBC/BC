@@ -13,6 +13,6 @@ export class UserController {
       return
     }
 
-    res.status(200).json(user)
+    res.status(200).json({ user })
   }
 }

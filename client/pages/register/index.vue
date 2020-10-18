@@ -104,15 +104,15 @@ export default defineComponent({
       }
 
       state.isLoading = true
-      await app.$axios.post('/auth/register', { ...state.userData }
-      ).then((response) => {
-        app.$auth.setUser(response.data)
-        app.router?.push('/')
-      }).catch((error: ApiErrorResponse) => {
-        state.error = error.response.data
-      }).finally(() => {
-        state.isLoading = false
-      })
+      await app.$axios.post('/auth/register', { ...state.userData })
+        .then(() => {
+          app.$auth.loginWith('local', { data: state.userData })
+          app.router?.push('/')
+        }).catch((error: ApiErrorResponse) => {
+          state.error = error.response.data
+        }).finally(() => {
+          state.isLoading = false
+        })
     }
 
     return {
