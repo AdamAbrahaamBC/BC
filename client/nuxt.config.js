@@ -61,15 +61,19 @@ export default {
   },
 
   auth: {
-    localStorage: false,
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/auth/login', method: 'post', propertyName: false },
+          login: { url: '/auth/login', method: 'post', propertyName: 'token' },
           logout: false,
-          user: false
+          user: { url: '/user', method: 'get', propertyName: 'user' }
         }
       }
+    },
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      home: '/'
     }
   },
 
