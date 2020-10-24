@@ -14,7 +14,9 @@
               type="is-blue"
               outlined
             >
-              New!
+              <nuxt-link to="/presentation/new">
+                New !
+              </nuxt-link>
             </b-button>
           </div>
         </div>
@@ -47,6 +49,7 @@ export default defineComponent({
     }
 
     return {
+      app,
       logout
     }
   }
