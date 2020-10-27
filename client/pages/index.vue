@@ -57,7 +57,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-  .presentation-card {
-    height: 45vh !important;
-  }
 </style>
