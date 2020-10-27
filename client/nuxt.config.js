@@ -21,7 +21,9 @@ export default {
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
-    { src: '@/assets/variables.scss', lang: 'sass' }
+    { src: '@/assets/variables.scss', lang: 'sass' },
+    { src: '@/assets/homepage.scss', lang: 'sass' },
+    { src: '@/assets/editor.scss', lang: 'sass' }
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)

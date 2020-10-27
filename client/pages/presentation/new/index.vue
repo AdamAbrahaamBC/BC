@@ -100,18 +100,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .menu {
-    height: 10vh;
-  }
-
-  .slide-list {
-    overflow-y: auto;
-    height: 90vh;
-  }
-
-  .slide {
-    overflow: hidden;
-    height: 10vh;
-  }
-
 </style>
