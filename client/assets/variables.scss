@@ -5,6 +5,8 @@
 $primary: #222831;
 $secondary: #393e46;
 $blue: #12c9ff;
+$red: #D11A2A;
+$white: #ffffff;
 
 $colors: (
     "white": ($white, $black),
@@ -12,6 +14,7 @@ $colors: (
     "primary": ($primary, $primary),
     "secondary": ($secondary, $secondary),
     "blue": ($blue, $blue),
+    "red": ($red, $red)
 );
 
 @import "~bulma";
