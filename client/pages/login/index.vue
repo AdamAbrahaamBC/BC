@@ -68,7 +68,7 @@ export default defineComponent({
       }
     })
 
-    async function onSubmit (): Promise<void> {
+    function onSubmit (): Promise<void> {
       if (!state.userData.email || !state.userData.password) {
         return
       }
@@ -82,13 +82,14 @@ export default defineComponent({
       }
 
       state.isLoading = true
-      await app.$auth.loginWith('local', { data: state.userData })
+      app.$auth.loginWith('local', { data: state.userData })
         .then(() => {
           app.router?.push('/')
         })
         .catch((error: ApiErrorResponse) => {
           state.error = error.response.data
-        }).finally(() => {
+        })
+        .finally(() => {
           state.isLoading = false
         })
     }

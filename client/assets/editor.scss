@@ -1,13 +1,17 @@
 .menu {
-  height: 10vh;
+  height: 20vh;
 }
 
 .slide-list {
   overflow-y: auto;
-  height: 90vh;
+  height: 80vh;
 }
 
 .slide {
   overflow: hidden;
-  height: 10vh;
+  height: 15vh;
+}
+
+.tui-editor-defaultUI {
+  border: 0px solid !important
 }
