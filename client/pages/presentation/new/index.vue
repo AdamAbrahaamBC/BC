@@ -1,8 +1,13 @@
 <template>
   <div class="columns mx-0 my-0" style="height: 100vh">
     <div class="column is-2 has-background-primary px-0 py-0">
-      <div class="menu">
-        <div class="tile is-ancestor my-0 mx-3">
+      <div class="menu mx-3 pt-2">
+        <div class="tile">
+          <b-button class="is-success" style="width: 100%" icon-left="content-save-outline" @click="openSavePanel">
+            SAVE
+          </b-button>
+        </div>
+        <div class="tile is-ancestor my-0">
           <div class="tile is-parent is-8">
             <b-button class="tile is-child" outlined type="is-secondary" @click="newSlide">
               <b-icon
@@ -12,7 +17,7 @@
             </b-button>
           </div>
           <div class="tile is-parent">
-            <b-button class="tile is-child" type="is-danger" :disabled="slides.length === 1" @click="deleteSlide">
+            <b-button class="tile is-child" type="is-danger" :disabled="presentation.slides.length === 1" @click="deleteSlide">
               <b-icon
                 icon="delete"
                 type="is-secondary"
@@ -23,9 +28,9 @@
       </div>
 
       <div class="slide-list">
-        <div v-for="(slide, index) in slides" :key="slide" class="px-5 py-3" :class="{'has-background-secondary': index === currentSlide}">
-          <div class="box" style="cursor: pointer" @click="currentSlide = index">
-            <viewer :initial-value="slide" class="has-background-white slide" />
+        <div v-for="(slide, index) in presentation.slides" :key="slide" class="px-5 py-3" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
+          <div class="box slide px-1 py-1" style="cursor: pointer" @click="switchSlide(index)">
+            <viewer :initial-value="slide" />
           </div>
         </div>
       </div>
@@ -33,46 +38,78 @@
 
     <div class="column px-5 py-5 has-background-secondary">
       <editor
-        v-if="slides.length"
+        v-if="currentSlide !== null && presentation.slides.length && !showSavePanel"
         :key="currentSlide"
         ref="editorRef"
         :options="options"
-        :initial-value="slides[currentSlide]"
+        :initial-value="presentation.slides[currentSlide]"
         height="100%"
-        class="has-background-white"
+        class="box px-2 py-2"
         @blur="saveSlideContent"
       />
+      <div v-else-if="showSavePanel" class="columns is-centered is-vcentered" style="height: 100%">
+        <div class="box has-background-primary" style="width: 50vw">
+          <b-field label="Presentation title" custom-class="has-text-white">
+            <b-input
+              v-model="presentation.title"
+              maxlength="30"
+              required
+            />
+          </b-field>
+          <b-field label="Version" custom-class="has-text-white">
+            <b-numberinput v-model="presentation.versionNumber" type="is-white" />
+          </b-field>
+          <b-field label="Version description" custom-class="has-text-white">
+            <b-input
+              v-model="presentation.description"
+              maxlength="100"
+              type="textarea"
+            />
+          </b-field>
+          <b-button class="is-success" style="width: 100%" icon-left="content-save-outline" @click="savePresentation">
+            SAVE PRESENTATION
+          </b-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs, useContext } from '@nuxtjs/composition-api'
 import { DialogProgrammatic as dialog } from 'buefy'
 
 export default defineComponent({
   layout: 'editor',
 
   setup () {
+    const { app } = useContext()
     const state = reactive({
       options: {
         usageStatistics: false,
         hideModeSwitch: true
       },
-      slides: ['# Title\n\ncontent'],
+      presentation: {
+        id: null,
+        title: 'New Presentation',
+        description: '',
+        versionNumber: 1.0,
+        slides: ['# Slide\ncontent']
+      },
       currentSlide: 0,
       slideContent: '',
-      editorRef: null
+      editorRef: null,
+      showSavePanel: false
     })
 
     function newSlide (): void {
-      state.slides.splice(state.currentSlide + 1, 0, '# Title\n\ncontent')
+      state.presentation.slides.splice(state.currentSlide + 1, 0, '# Slide\ncontent')
       state.currentSlide++
     }
 
     function saveSlideContent (): void {
       const content = state.editorRef.invoke('getMarkdown')
-      state.slides[state.currentSlide] = content
+      state.presentation.slides[state.currentSlide] = content
     }
 
     function deleteSlide (): void {
@@ -83,17 +120,34 @@ export default defineComponent({
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => {
-          state.slides.splice(state.currentSlide, 1)
-          state.currentSlide = state.currentSlide >= state.slides.length ? state.slides.length - 1 : state.currentSlide
+          state.presentation.slides.splice(state.currentSlide, 1)
+          state.currentSlide = state.currentSlide >= state.presentation.slides.length ? state.presentation.slides.length - 1 : state.currentSlide
         }
       })
+    }
+
+    function openSavePanel (): void {
+      state.currentSlide = null
+      state.showSavePanel = true
+    }
+
+    function switchSlide (index: number): void {
+      state.currentSlide = index
+      state.showSavePanel = false
+    }
+
+    function savePresentation (): void {
+      app.$axios.post('/presentation', { userId: app.$auth.user._id, presentation: state.presentation })
     }
 
     return {
       ...toRefs(state),
       newSlide,
       saveSlideContent,
-      deleteSlide
+      deleteSlide,
+      savePresentation,
+      openSavePanel,
+      switchSlide
     }
   }
 })
