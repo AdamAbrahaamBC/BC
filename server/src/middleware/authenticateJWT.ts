@@ -9,12 +9,12 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
   }
 
   const token = authHeader.split(' ')[1]
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (error: any, user: any) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (error: any, userId: any) => {
     if (error) {
       return res.sendStatus(403)
     }
 
-    res.locals.jwtPayload = user
+    res.locals.jwtPayload = userId
     next()
   })
 

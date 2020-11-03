@@ -137,7 +137,7 @@ export default defineComponent({
     }
 
     function savePresentation (): void {
-      app.$axios.post('/presentation', { userId: app.$auth.user._id, presentation: state.presentation })
+      app.$axios.post('/presentation', { presentation: state.presentation })
     }
 
     return {

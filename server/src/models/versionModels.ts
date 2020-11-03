@@ -1,5 +1,5 @@
 export interface IVersion {
-  _id: number
   number: number
+  description: string
   slides: string[]
 }
