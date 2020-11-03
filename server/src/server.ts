@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 
 import { AuthRoutes } from "./routes/authRoutes";
 import { UserRoutes } from "./routes/userRoutes";
+import { PresentationRoutes } from "./routes/presentationRoutes";
 
 class Server {
   public app: express.Express;
@@ -31,6 +32,7 @@ class Server {
   public routes(): void {
     this.app.use("/api/auth", new AuthRoutes().router)
     this.app.use("/api/user", new UserRoutes().router)
+    this.app.use("/api/presentation", new PresentationRoutes().router)
   }
 
   public database(): void {
