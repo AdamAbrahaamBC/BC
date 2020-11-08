@@ -22,7 +22,7 @@
             VIEW
           </b-button>
         </nuxt-link>
-        <b-button type="is-danger" icon-right="delete" @click.stop="">
+        <b-button type="is-danger" icon-right="delete" @click.stop="deletePresentation">
           DELETE
         </b-button>
       </div>
@@ -38,6 +38,7 @@
 <script lang="ts">
 import { defineComponent, toRefs, reactive, useContext } from '@nuxtjs/composition-api'
 import { PropType } from 'vue'
+import { DialogProgrammatic as dialog } from 'buefy'
 import { PresentationSummary } from '../models/presentation/PresentationSummary'
 
 export default defineComponent({
@@ -61,8 +62,29 @@ export default defineComponent({
       })
     }
 
+    function deletePresentation (): void {
+      dialog.prompt({
+        title: 'Deleting presentation',
+        message: `Are you sure you want to <b>delete</b> this presentation? This action cannot be undone.\nTo delete type <b>${props.presentation.title}</b> below.`,
+        inputAttrs: {
+          placeholder: props.presentation.title
+        },
+        confirmText: 'Delete',
+        type: 'is-danger',
+        hasIcon: true,
+        closeOnConfirm: false,
+        onConfirm: async (value, { close }) => {
+          if (value === props.presentation.title) {
+            close()
+            await app.$axios.delete('/presentation', { params: { id: props.presentation.presentationId } })
+          }
+        }
+      })
+    }
+
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      deletePresentation
     }
   }
 })
