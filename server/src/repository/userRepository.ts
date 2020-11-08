@@ -32,6 +32,15 @@ class UserRepository {
 
     return user.save()
   }
+
+  public async deletePresentationSummary(user: IUser, presentationId: string): Promise<void> {
+    const summaryIndex = user.presentations.findIndex(x => x.presentationId == presentationId)
+    if (~summaryIndex) {
+      user.presentations.splice(summaryIndex, 1);
+      user.markModified('presentations')
+      user.save()
+    }
+  }
 }
 
 const userRepository = new UserRepository()

@@ -2,14 +2,14 @@ import { Document } from "mongoose"
 import { IVersion } from "./versionModels";
 
 export interface IPresentationSummary {
-  presentationId: number
+  presentationId: string
   lastEdited: string
   title: string
   firstPage: string
 }
 
 export interface IPresentationRequest {
-  id: number
+  id: string
   title: string
   description: string
   versionNumber: number
@@ -17,7 +17,7 @@ export interface IPresentationRequest {
 }
 
 export interface IPresentation extends Document {
-  _id: number
+  _id: string
   title: string
   versions: IVersion[]
 }

@@ -6,8 +6,13 @@ import userRepository from "../repository/userRepository";
 
 class PresentationRepository {
 
-  public async getPresentation(userId: number): Promise<IPresentation> {
-    return
+  public async getPresentation(presentationId: string): Promise<IPresentation> {
+    return Presentation.findById(presentationId)
+  }
+
+  public async deletePresentation(user: IUser, presentationId: string): Promise<IPresentation> {
+    await userRepository.deletePresentationSummary(user, presentationId)
+    return Presentation.findByIdAndDelete(presentationId)
   }
 
   public async newPresentation(user: IUser, presentationData: IPresentationRequest): Promise<IPresentation> {
