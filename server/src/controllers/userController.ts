@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
-import { User } from "../database/user";
 import { IUser } from "../models/userModels";
+import userRepository from "../repository/userRepository";
 
 export class UserController {
 
   public async getCurrentUser(req: Request, res: Response): Promise<void> {
-    const userId: string = res.locals.jwtPayload.userId
-
-    const user: IUser = await User.findById(userId)
+    const user: IUser = await userRepository.getUserById(res.locals.jwtPayload.userId)
     if (!user) {
       res.status(404).json("User not found!")
       return

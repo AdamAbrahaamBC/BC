@@ -70,7 +70,7 @@ import { defineComponent, toRefs, reactive, useContext } from '@nuxtjs/compositi
 import { ApiErrorResponse } from '../../models/error/ApiErrorResponse'
 
 export default defineComponent({
-  layout: 'no-auth',
+  layout: 'noAuth',
   auth: false,
 
   setup () {

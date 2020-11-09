@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import { User } from "../database/user";
-import { IUser } from "../models/userModels";
-import bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import { IUser, IUserRequest } from "../models/userModels";
+import userRepository from "../repository/userRepository";
 
 const saltRounds: number = 10
 
@@ -10,26 +8,26 @@ export class AuthController {
 
   public async register(req: Request, res: Response): Promise<void> {
     try {
-      const exists = await User.findOne({ email: req.body.email })
+      const exists = await userRepository.getUserByEmail(req.body.email)
       if (exists) {
-        res.status(400).json("User already exists!")
+        res.status(400).json("Email already exists!")
         return
       }
 
-      bcrypt.hash(req.body.password, saltRounds).then((hash) => {
-        const newUser: IUser = new User({
-          email: req.body.email,
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          password: hash,
-          presentations: []
-        })
+      const newUserData: IUserRequest = {
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        password: req.body.password
+      }
 
-        newUser.save()
-        res.status(201).json(newUser)
-      }).catch((error) => {
-        res.status(500).json(error)
-      })
+      userRepository.saveNewUser(newUserData)
+        .then((newUser: IUser) => {
+          res.status(201).json(newUser)
+        })
+        .catch((error: string) => {
+          res.status(500).json(error)
+        })
     } catch {
       res.status(500)
     }
@@ -37,22 +35,19 @@ export class AuthController {
 
   public async login(req: Request, res: Response): Promise<void> {
     try {
-      const user: IUser = await User.findOne({ email: req.body.email })
+      const user: IUser = await userRepository.getUserByEmail(req.body.email)
       if (!user) {
         res.status(404).json("User not found!")
         return
       }
 
-      bcrypt.compare(req.body.password, user.password).then((valid) => {
-        if (!valid) {
-          res.status(401).json("Incorrect password!")
-          return
-        }
-
-        const token = jwt.sign({ userId: user.id }, process.env.ACCESS_TOKEN_SECRET)
-
-        res.status(200).json({ token })
-      });
+      userRepository.getUserToken(req.body.password, user.password, user.id)
+        .then((token: string) => {
+          res.status(200).json({ token })
+        })
+        .catch((error: string) => {
+          res.status(401).json(error)
+        })
     } catch {
       res.status(500)
     }
