@@ -8,7 +8,7 @@ export class PresentationController {
 
   public async save(req: Request, res: Response): Promise<void> {
     try {
-      const user: IUser = await userRepository.getUser(res.locals.jwtPayload.userId)
+      const user: IUser = await userRepository.getUserById(res.locals.jwtPayload.userId)
       if (!user) {
         res.status(404).json("User not found!")
         return
@@ -44,7 +44,7 @@ export class PresentationController {
 
   public async delete(req: Request, res: Response): Promise<void> {
     try {
-      const user: IUser = await userRepository.getUser(res.locals.jwtPayload.userId)
+      const user: IUser = await userRepository.getUserById(res.locals.jwtPayload.userId)
       if (!user) {
         res.status(404).json("User not found!")
         return
