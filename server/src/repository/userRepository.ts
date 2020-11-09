@@ -13,7 +13,7 @@ class UserRepository {
       presentationId: presentation.id,
       lastEdited: new Date().toLocaleString('sk'),
       title: presentation.title,
-      firstPage: presentation.slides[0]
+      currentVersion: presentation.versionNumber
     }
 
     user.presentations.push(presentationSummary)
@@ -26,7 +26,6 @@ class UserRepository {
 
     presentationSummary.title = presentation.title
     presentationSummary.lastEdited = new Date().toLocaleString('sk')
-    presentationSummary.firstPage = presentation.slides[0]
 
     user.markModified('presentations')
 

@@ -5,7 +5,7 @@ export interface IPresentationSummary {
   presentationId: string
   lastEdited: string
   title: string
-  firstPage: string
+  currentVersion: number
 }
 
 export interface IPresentationRequest {
