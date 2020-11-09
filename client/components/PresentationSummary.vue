@@ -5,7 +5,10 @@
         <b-icon :icon="isOpen ? 'chevron-up' : 'chevron-down'" class="mr-3 is-hidden-mobile" />
         <div>
           <strong class="has-text-white">{{ presentation.title }}</strong>
-          <p class="is-size-7 mt-1">
+          <b-tag rounded outlined type="is-success">
+            v{{ presentation.currentVersion }}
+          </b-tag>
+          <p class="is-size-7 mt-2 has-text-blue">
             last edited: {{ presentation.lastEdited }}<br>
             more info...
           </p>

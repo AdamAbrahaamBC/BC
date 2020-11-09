@@ -35,15 +35,19 @@ class PresentationRepository {
     return newPresentation
   }
 
-  public async updatePresentation(user: IUser, presentationData: IPresentationRequest): Promise<IPresentation> {
+  public async updatePresentation(user: IUser, presentationData: IPresentationRequest): Promise<IPresentation | void> {
+    const presentation: IPresentation = await Presentation.findById(presentationData.id)
+    if (!presentation) {
+      return Promise.resolve()
+    }
+
+    presentation.title = presentationData.title
+
     const version: IVersion = {
       number: presentationData.versionNumber,
       description: presentationData.description,
       slides: presentationData.slides
     }
-
-    const presentation: IPresentation = await Presentation.findById(presentationData.id)
-    presentation.title = presentationData.title
 
     const highestVersionNumber: number = presentation.versions[presentation.versions.length - 1].number
     const versionIndex = presentation.versions.findIndex(x => x.number === presentationData.versionNumber)
@@ -54,9 +58,7 @@ class PresentationRepository {
       presentation.versions.push(version)
     }
 
-    if (version.number >= highestVersionNumber) {
-      userRepository.updatePresentationSummary(user, presentationData)
-    }
+    userRepository.updatePresentationSummary(user, presentationData)
 
     return presentation.save()
   }

@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%" class="has-background-primary">
+  <div style="min-height: 100vh" class="has-background-primary">
     <div class="hero">
       <div class="hero-body">
         <div class="box has-background-primary">
