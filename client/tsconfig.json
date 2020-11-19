@@ -34,5 +34,12 @@
     "node_modules",
     ".nuxt",
     "dist"
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.vue"
+  ],
+  "files": [
+    "vue-shim.d.ts"
   ]
 }

@@ -1,5 +1,5 @@
 <template>
-  <b-collapse v-model="isOpen" :aria-id="presentation.presentationId" class="panel" animation="slide">
+  <b-collapse v-model="isOpen" :aria-id="presentation.presentationId" class="panel" animation="slide" @open="loadPresentationDetails">
     <div slot="trigger" class="panel-heading has-background-secondary has-text-white level" role="button" :aria-controls="presentation.presentationId">
       <div class="level mb-0">
         <b-icon :icon="isOpen ? 'chevron-up' : 'chevron-down'" class="mr-3 is-hidden-mobile" />
@@ -31,20 +31,23 @@
       </div>
     </div>
     <div class="panel-block has-background-white">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. <br>
-      Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. <br>
-      Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.
+      <SummaryVersionDetails v-if="versionDetail" :version-detail="versionDetail" :versions="versions" @version-changed="selectedVersion = $event" />
+      <loader v-else />
     </div>
   </b-collapse>
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, reactive, useContext } from '@nuxtjs/composition-api'
+import { defineComponent, toRefs, reactive, useContext, computed } from '@nuxtjs/composition-api'
 import { PropType } from 'vue'
 import { DialogProgrammatic as dialog } from 'buefy'
 import { PresentationSummary } from '../models/presentation/PresentationSummary'
+import { PresentationDetail } from '../models/presentation/PresentationDetail'
+import SummaryVersionDetails from '../components/SummaryVersionDetails.vue'
 
 export default defineComponent({
+  components: { SummaryVersionDetails },
+
   props: {
     presentation: Object as PropType<PresentationSummary>
   },
@@ -52,17 +55,22 @@ export default defineComponent({
   setup (props) {
     const { app } = useContext()
     const state = reactive({
-      isOpen: false
+      isOpen: false as boolean,
+      presentationDetail: null as PresentationDetail | null,
+      selectedVersion: props.presentation.currentVersion as number,
+      versionDetail: computed(() => {
+        return state.presentationDetail ? state.presentationDetail.versions.find(x => x.number === state.selectedVersion) : null
+      }),
+      versions: computed(() => {
+        return state.presentationDetail ? state.presentationDetail.versions.map(x => x.number) : []
+      })
     })
 
     function loadPresentationDetails (): void {
-      app.$axios.get('/presentation', {
-        params: {
-          id: props.presentation.presentationId
-        }
-      }).then((response) => {
-
-      })
+      app.$axios.get('/presentation', { params: { id: props.presentation.presentationId } })
+        .then((response) => {
+          state.presentationDetail = response.data
+        })
     }
 
     function deletePresentation (): void {
@@ -87,6 +95,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      loadPresentationDetails,
       deletePresentation
     }
   }

@@ -23,13 +23,16 @@ export default {
   css: [
     { src: '@/assets/variables.scss', lang: 'sass' },
     { src: '@/assets/homepage.scss', lang: 'sass' },
-    { src: '@/assets/editor.scss', lang: 'sass' }
+    { src: '@/assets/editor.scss', lang: 'sass' },
+    { src: '@/assets/loader.scss', lang: 'sass' },
+    { src: '@/assets/presentationSummary.scss', lang: 'sass' }
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '~/plugins/editor.ts',
-    '~/plugins/viewer.ts'
+    '~/plugins/viewer.ts',
+    '~/plugins/loader.ts'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
