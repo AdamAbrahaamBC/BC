@@ -27,13 +27,17 @@
         </div>
       </div>
 
-      <div class="slide-list">
-        <div v-for="(slide, index) in presentation.slides" :key="slide" class="px-5 py-3" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
+      <draggable
+        :list="presentation.slides"
+        class="slide-list"
+        ghost-class="ghost"
+      >
+        <div v-for="(slide, index) in presentation.slides" :key="slide + index" class="px-5 py-3" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
           <div class="box slide px-1 py-1" style="cursor: pointer" @click="switchSlide(index)">
             <viewer :initial-value="slide" />
           </div>
         </div>
-      </div>
+      </draggable>
     </div>
 
     <div class="column px-5 py-5 has-background-secondary">
