@@ -52,13 +52,18 @@
 
 <script lang="ts">
 import { defineComponent, ref } from '@nuxtjs/composition-api'
-import { PropType } from 'vue'
 import { PresentationVersion } from '../models/presentation/PresentationDetail'
 
 export default defineComponent({
   props: {
-    versionDetail: Object as PropType<PresentationVersion>,
-    versions: Array as PropType<string[]>
+    versionDetail: {
+      type: Object as () => PresentationVersion,
+      required: true
+    },
+    versions: {
+      type: Array as () => string[],
+      required: true
+    }
   },
 
   setup (props) {

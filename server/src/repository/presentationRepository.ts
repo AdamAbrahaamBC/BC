@@ -49,7 +49,6 @@ class PresentationRepository {
       slides: presentationData.slides
     }
 
-    const highestVersionNumber: number = presentation.versions[presentation.versions.length - 1].number
     const versionIndex = presentation.versions.findIndex(x => x.number === presentationData.versionNumber)
     if (~versionIndex) {
       presentation.versions[versionIndex] = version

@@ -5,7 +5,7 @@ export interface PresentationDetail {
 }
 
 export interface PresentationVersion {
-  number: number
+  number: string
   description: string
   slides: string[]
 }

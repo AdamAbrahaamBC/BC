@@ -1,6 +1,6 @@
 export interface PresentationSummary {
   presentationId: string
   title: string
-  currentVersion: number
+  currentVersion: string
   lastEdited: string
 }

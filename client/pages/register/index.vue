@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, reactive, useContext } from '@nuxtjs/composition-api'
+import { defineComponent, toRefs, reactive, useContext, ref } from '@nuxtjs/composition-api'
 import { ApiErrorResponse } from '../../models/error/ApiErrorResponse'
 
 export default defineComponent({
@@ -74,12 +74,12 @@ export default defineComponent({
   auth: false,
 
   setup () {
-    const { app } = useContext()
+    const { app: { $axios, $auth, router } } = useContext()
     const state = reactive({
-      emailRef: null,
-      passwordRef: null,
-      firstNameRef: null,
-      lastNameRef: null,
+      emailRef: ref(null),
+      passwordRef: ref(null),
+      firstNameRef: ref(null),
+      lastNameRef: ref(null),
       error: '',
       isLoading: false,
       userData: {
@@ -90,7 +90,7 @@ export default defineComponent({
       }
     })
 
-    function onSubmit (): Promise<void> {
+    function onSubmit () {
       if (!state.userData.email || !state.userData.password || !state.userData.firstName || !state.userData.lastName) {
         return
       }
@@ -104,10 +104,10 @@ export default defineComponent({
       }
 
       state.isLoading = true
-      app.$axios.post('/auth/register', { ...state.userData })
+      $axios.post('/auth/register', { ...state.userData })
         .then(() => {
-          app.$auth.loginWith('local', { data: state.userData })
-          app.router?.push('/')
+          $auth.loginWith('local', { data: state.userData })
+          router?.push('/')
         })
         .catch((error: ApiErrorResponse) => {
           state.error = error.response.data

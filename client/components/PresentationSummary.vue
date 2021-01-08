@@ -1,36 +1,38 @@
 <template>
   <b-collapse v-model="isOpen" :aria-id="presentation.presentationId" class="panel" animation="slide" @open="loadPresentationDetails">
-    <div slot="trigger" class="panel-heading has-background-secondary has-text-white level" role="button" :aria-controls="presentation.presentationId">
-      <div class="level mb-0">
-        <b-icon :icon="isOpen ? 'chevron-up' : 'chevron-down'" class="mr-3 is-hidden-mobile" />
+    <template #trigger>
+      <div class="panel-heading has-background-primary has-text-white level" role="button" :aria-controls="presentation.presentationId">
+        <div class="level mb-0">
+          <b-icon :icon="isOpen ? 'chevron-up' : 'chevron-down'" class="mr-3 is-hidden-mobile" />
+          <div>
+            <strong class="has-text-white">{{ presentation.title }}</strong>
+            <b-tag rounded outlined type="is-success">
+              v{{ presentation.currentVersion }}
+            </b-tag>
+            <p class="is-size-7 mt-2 has-text-blue">
+              last edited: {{ presentation.lastEdited }}<br>
+              more info...
+            </p>
+          </div>
+        </div>
         <div>
-          <strong class="has-text-white">{{ presentation.title }}</strong>
-          <b-tag rounded outlined type="is-success">
-            v{{ presentation.currentVersion }}
-          </b-tag>
-          <p class="is-size-7 mt-2 has-text-blue">
-            last edited: {{ presentation.lastEdited }}<br>
-            more info...
-          </p>
+          <nuxt-link :to="`/presentation/${presentation.presentationId}/${presentation.currentVersion}`" @click.stop>
+            <b-button type="is-success" icon-right="pencil">
+              EDIT
+            </b-button>
+          </nuxt-link>
+          <nuxt-link :to="`/presentation/${presentation.presentationId}/preview`" @click.stop>
+            <b-button type="is-success" icon-right="eye" @click.stop="">
+              VIEW
+            </b-button>
+          </nuxt-link>
+          <b-button type="is-danger" icon-right="delete" @click.stop="deletePresentation">
+            DELETE
+          </b-button>
         </div>
       </div>
-      <div>
-        <nuxt-link :to="`/presentation/${presentation.presentationId}`" @click.stop>
-          <b-button type="is-success" icon-right="pencil">
-            EDIT
-          </b-button>
-        </nuxt-link>
-        <nuxt-link :to="`/presentation/${presentation.presentationId}/preview`" @click.stop>
-          <b-button type="is-success" icon-right="eye" @click.stop="">
-            VIEW
-          </b-button>
-        </nuxt-link>
-        <b-button type="is-danger" icon-right="delete" @click.stop="deletePresentation">
-          DELETE
-        </b-button>
-      </div>
-    </div>
-    <div class="panel-block has-background-white">
+    </template>
+    <div class="panel-block has-background-secondary">
       <SummaryVersionDetails v-if="versionDetail" :version-detail="versionDetail" :versions="versions" @version-changed="selectedVersion = $event" />
       <loader v-else />
     </div>
@@ -38,31 +40,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, reactive, useContext, computed } from '@nuxtjs/composition-api'
-import { PropType } from 'vue'
+import { defineComponent, toRefs, reactive, useContext, computed, ComputedRef } from '@nuxtjs/composition-api'
 import { DialogProgrammatic as dialog } from 'buefy'
 import { PresentationSummary } from '../models/presentation/PresentationSummary'
-import { PresentationDetail } from '../models/presentation/PresentationDetail'
+import { PresentationDetail, PresentationVersion } from '../models/presentation/PresentationDetail'
 import SummaryVersionDetails from '../components/SummaryVersionDetails.vue'
+
+interface State {
+  isOpen: boolean
+  presentationDetail: PresentationDetail | null
+  selectedVersion: string
+  versionDetail: ComputedRef<PresentationVersion | null>
+  versions: ComputedRef<string[]>
+}
 
 export default defineComponent({
   components: { SummaryVersionDetails },
 
   props: {
-    presentation: Object as PropType<PresentationSummary>
+    presentation: {
+      type: Object as () => PresentationSummary,
+      required: true
+    }
   },
 
-  setup (props) {
+  setup (props: any) {
     const { app } = useContext()
-    const state = reactive({
-      isOpen: false as boolean,
-      presentationDetail: null as PresentationDetail | null,
-      selectedVersion: props.presentation.currentVersion as number,
-      versionDetail: computed(() => {
-        return state.presentationDetail ? state.presentationDetail.versions.find(x => x.number === state.selectedVersion) : null
+    const state: any = reactive<State>({
+      isOpen: false,
+      presentationDetail: null,
+      selectedVersion: props.presentation.currentVersion,
+      versionDetail: computed<PresentationVersion | null>(() => {
+        return state.presentationDetail ? state.presentationDetail.versions.find((x: PresentationVersion) => x.number === state.selectedVersion) : null
       }),
-      versions: computed(() => {
-        return state.presentationDetail ? state.presentationDetail.versions.map(x => x.number) : []
+      versions: computed<string[]>(() => {
+        return state.presentationDetail ? state.presentationDetail.versions.map((x: PresentationVersion) => x.number) : []
       })
     })
 

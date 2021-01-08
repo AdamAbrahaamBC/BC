@@ -63,6 +63,14 @@ export default {
   build: {
   },
 
+  typescript: {
+    typeCheck: {
+      eslint: {
+        files: './**/*.{ts,js,vue}'
+      }
+    }
+  },
+
   router: {
     middleware: ['auth']
   },

@@ -15,6 +15,8 @@ export class PresentationController {
       }
 
       const presentation: IPresentationRequest = req.body.presentation
+      presentation.versionNumber = presentation.versionNumber.toString()
+
       if (presentation.id) {
         await presentationRepository.updatePresentation(user, presentation)
       } else {

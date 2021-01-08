@@ -6,10 +6,15 @@ module.exports = {
   },
   extends: [
     '@nuxtjs/eslint-config-typescript',
-    'plugin:nuxt/recommended'
+    'plugin:nuxt/recommended',
+    'plugin:vue/vue3-recommended'
   ],
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {},
+  ignorePatterns: [
+    'vue-shim.d.ts',
+    'dist/'
+  ]
 }

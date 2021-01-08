@@ -52,11 +52,11 @@ import { defineComponent, toRefs, reactive, useContext } from '@nuxtjs/compositi
 import { ApiErrorResponse } from '../../models/error/ApiErrorResponse'
 
 export default defineComponent({
-  layout: 'noAuth',
   auth: false,
+  layout: 'noAuth',
 
   setup () {
-    const { app } = useContext()
+    const { app: { $auth, router } } = useContext()
     const state = reactive({
       emailRef: null,
       passwordRef: null,
@@ -68,7 +68,7 @@ export default defineComponent({
       }
     })
 
-    function onSubmit (): Promise<void> {
+    function onSubmit () {
       if (!state.userData.email || !state.userData.password) {
         return
       }
@@ -82,9 +82,9 @@ export default defineComponent({
       }
 
       state.isLoading = true
-      app.$auth.loginWith('local', { data: state.userData })
+      $auth.loginWith('local', { data: state.userData })
         .then(() => {
-          app.router?.push('/')
+          router?.push('/')
         })
         .catch((error: ApiErrorResponse) => {
           state.error = error.response.data
