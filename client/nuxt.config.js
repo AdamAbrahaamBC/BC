@@ -32,7 +32,8 @@ export default {
   plugins: [
     '~/plugins/editor.ts',
     '~/plugins/viewer.ts',
-    '~/plugins/loader.ts'
+    '~/plugins/loader.ts',
+    { src: '~/plugins/draggable.ts', mode: 'client' }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
