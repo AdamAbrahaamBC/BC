@@ -20,7 +20,7 @@ export default defineComponent({
       await $axios.get('/presentation', { params: { id: params.value.id } })
         .then((response) => {
           const presentationDetail: PresentationDetail = response.data
-          const versionDetail: PresentationVersion | undefined = presentationDetail.versions.find(x => x.number === params.value.version)
+          const versionDetail: PresentationVersion | undefined = presentationDetail.versions.find(x => x.number === Number(params.value.version))
 
           if (versionDetail) {
             presentation.value = {

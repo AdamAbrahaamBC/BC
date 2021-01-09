@@ -70,7 +70,7 @@
               type="textarea"
             />
           </b-field>
-          <b-button class="is-success" style="width: 100%" icon-left="content-save-outline" @click="savePresentation">
+          <b-button class="is-success" style="width: 100%" icon-left="content-save-outline" @click="confirmSave">
             SAVE PRESENTATION
           </b-button>
         </div>
@@ -81,7 +81,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, useContext } from '@nuxtjs/composition-api'
-import { DialogProgrammatic as dialog } from 'buefy'
+import { DialogProgrammatic as dialog, ToastProgrammatic as Toast } from 'buefy'
 import { PresentationEditable } from '../models/presentation/PresentationEditable'
 
 interface State {
@@ -107,7 +107,7 @@ export default defineComponent({
   },
 
   setup (props: any) {
-    const { app } = useContext()
+    const { app, params } = useContext()
     const state: any = reactive<State>({
       options: {
         usageStatistics: false,
@@ -154,8 +154,26 @@ export default defineComponent({
       state.showSavePanel = false
     }
 
+    function confirmSave (): void {
+      if (state.presentation.versionNumber <= Number(params.value.version)) {
+        dialog.confirm({
+          title: 'Overwriting changes',
+          message: 'This version is already saved. Are you sure you want to <b>overwright</b> it? This action cannot be undone.',
+          confirmText: 'Save',
+          type: 'is-warning',
+          hasIcon: true,
+          onConfirm: () => {
+            savePresentation()
+          }
+        })
+      } else {
+        savePresentation()
+      }
+    }
+
     function savePresentation (): void {
       app.$axios.post('/presentation', { presentation: state.presentation })
+      Toast.open({ message: 'Successfully saved!', type: 'is-sucess', position: 'is-bottom' })
     }
 
     return {
@@ -163,7 +181,7 @@ export default defineComponent({
       newSlide,
       saveSlideContent,
       deleteSlide,
-      savePresentation,
+      confirmSave,
       openSavePanel,
       switchSlide
     }

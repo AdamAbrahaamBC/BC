@@ -49,9 +49,9 @@ import SummaryVersionDetails from '../components/SummaryVersionDetails.vue'
 interface State {
   isOpen: boolean
   presentationDetail: PresentationDetail | null
-  selectedVersion: string
+  selectedVersion: number
   versionDetail: ComputedRef<PresentationVersion | null>
-  versions: ComputedRef<string[]>
+  versions: ComputedRef<number[]>
 }
 
 export default defineComponent({
@@ -73,7 +73,7 @@ export default defineComponent({
       versionDetail: computed<PresentationVersion | null>(() => {
         return state.presentationDetail ? state.presentationDetail.versions.find((x: PresentationVersion) => x.number === state.selectedVersion) : null
       }),
-      versions: computed<string[]>(() => {
+      versions: computed<number[]>(() => {
         return state.presentationDetail ? state.presentationDetail.versions.map((x: PresentationVersion) => x.number) : []
       })
     })

@@ -61,7 +61,7 @@ export default defineComponent({
       required: true
     },
     versions: {
-      type: Array as () => string[],
+      type: Array as () => number[],
       required: true
     }
   },

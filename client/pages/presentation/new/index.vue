@@ -15,7 +15,7 @@ export default defineComponent({
       id: null,
       title: 'New Presentation',
       description: '',
-      versionNumber: '1.0',
+      versionNumber: 1,
       slides: ['# Slide\ncontent']
     })
 
