@@ -56,8 +56,7 @@ class UserRepository {
   }
 
   public async updatePresentationSummary(user: IUser, presentation: IPresentationRequest): Promise<IUser> {
-    const presentationSummary: IPresentationSummary = user.presentations.find(x => x.presentationId === presentation.id)
-
+    const presentationSummary: IPresentationSummary = user.presentations.find(x => x.presentationId.toString() === presentation.id)
     presentationSummary.title = presentation.title
     presentationSummary.lastEdited = new Date().toLocaleString('sk')
 

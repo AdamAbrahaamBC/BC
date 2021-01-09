@@ -5,14 +5,14 @@ export interface IPresentationSummary {
   presentationId: string
   lastEdited: string
   title: string
-  currentVersion: string
+  currentVersion: number
 }
 
 export interface IPresentationRequest {
   id: string
   title: string
   description: string
-  versionNumber: string
+  versionNumber: number
   slides: string[]
 }
 
