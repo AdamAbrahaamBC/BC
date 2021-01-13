@@ -2,20 +2,19 @@
   <div style="min-height: 100vh" class="has-background-primary">
     <div class="hero">
       <div class="hero-body">
-        <div class="box has-background-primary">
+        <div class="box has-background-secondary">
           <div class="level">
-            <h1 class="title has-text-blue level-left mb-0">
+            <h1 class="title has-text-primary level-left mb-0">
               {{ `# Hi, ${app.$auth.user.firstName} ${app.$auth.user.lastName} !` }}
             </h1>
             <b-button
-              type="is-blue has-text-blue"
-              outlined
+              type="is-primary has-text-blue"
               class="level-right"
               icon-left="logout"
               @click="$auth.logout()"
             >
               <h2 class="subtitle has-text-blue">
-                Logout !
+                Logout
               </h2>
             </b-button>
           </div>

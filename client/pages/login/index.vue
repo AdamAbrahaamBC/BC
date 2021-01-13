@@ -1,7 +1,7 @@
 <template>
   <div class="box has-background-secondary">
     <div class="has-text-centered mb-5">
-      <strong class="is-uppercase has-text-white is-size-4">Login</strong>
+      <strong class="is-uppercase has-text-gray is-size-4">Login</strong>
     </div>
 
     <b-message v-if="error.length" type="is-danger" has-icon>
@@ -9,7 +9,7 @@
       <p>{{ error }}</p>
     </b-message>
 
-    <b-field label="Email" custom-class="has-text-white">
+    <b-field label="Email" custom-class="has-text-gray">
       <b-input
         ref="emailRef"
         v-model="userData.email"
@@ -18,7 +18,7 @@
         required
       />
     </b-field>
-    <b-field label="Password" custom-class="has-text-white">
+    <b-field label="Password" custom-class="has-text-gray">
       <b-input
         ref="passwordRef"
         v-model="userData.password"
@@ -31,13 +31,13 @@
     <div class="columns mt-5">
       <div class="column">
         <nuxt-link to="/register">
-          <b-button type="is-secondary has-text-blue" expanded>
-            Register !
+          <b-button type="is-secondary has-text-primary has-text-weight-bold" expanded>
+            Register
           </b-button>
         </nuxt-link>
       </div>
       <div class="column">
-        <b-button type="is-blue has-text-primary" expanded @click="onSubmit">
+        <b-button type="is-primary has-text-secondary has-text-weight-bold" expanded @click="onSubmit">
           Sign In!
         </b-button>
       </div>

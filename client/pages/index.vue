@@ -1,23 +1,23 @@
 <template>
   <div>
-    <div class="panel">
-      <div class="panel-heading has-text-centered has-background-secondary" style="cursor: pointer">
-        <nuxt-link to="/presentation/new">
-          CREATE NEW!
-        </nuxt-link>
+    <nuxt-link to="/presentation/new">
+      <div class="box has-background-primary has-text-centered has-text-secondary has-text-weight-bold" style="border: 2px solid #f3f3f3">
+        CREATE NEW!
       </div>
-    </div>
+    </nuxt-link>
 
-    <div class="box has-background-calico">
-      <h1 class="title">
-        Your presentations:
-      </h1>
+    <div class="box has-background-secondary mt-6">
+      <div class="mx-5 my-5">
+        <h1 class="title">
+          Your presentations:
+        </h1>
 
-      <PresentationSummary
-        v-for="presentation in presentations"
-        :key="presentation.presentationId"
-        :presentation="presentation"
-      />
+        <PresentationSummary
+          v-for="presentation in presentations"
+          :key="presentation.presentationId"
+          :presentation="presentation"
+        />
+      </div>
     </div>
   </div>
 </template>

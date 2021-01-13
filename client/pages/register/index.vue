@@ -1,7 +1,7 @@
 <template>
   <div class="box has-background-secondary">
     <div class="has-text-centered mb-5">
-      <strong class="is-uppercase has-text-white is-size-4">Register</strong>
+      <strong class="is-uppercase has-text-gray is-size-4">Register</strong>
     </div>
 
     <b-message v-if="error.length" type="is-danger" has-icon>
@@ -9,7 +9,7 @@
       <p>{{ error }}</p>
     </b-message>
 
-    <b-field label="First name" custom-class="has-text-white">
+    <b-field label="First name" custom-class="has-text-gray">
       <b-input
         ref="firstNameRef"
         v-model="userData.firstName"
@@ -18,7 +18,7 @@
         required
       />
     </b-field>
-    <b-field label="Last name" custom-class="has-text-white">
+    <b-field label="Last name" custom-class="has-text-gray">
       <b-input
         ref="lastNameRef"
         v-model="userData.lastName"
@@ -27,7 +27,7 @@
         required
       />
     </b-field>
-    <b-field label="Email" custom-class="has-text-white">
+    <b-field label="Email" custom-class="has-text-gray">
       <b-input
         ref="emailRef"
         v-model="userData.email"
@@ -36,7 +36,7 @@
         required
       />
     </b-field>
-    <b-field label="Password" custom-class="has-text-white">
+    <b-field label="Password" custom-class="has-text-gray">
       <b-input
         ref="passwordRef"
         v-model="userData.password"
@@ -49,14 +49,14 @@
     <div class="columns mt-5">
       <div class="column">
         <nuxt-link to="/login">
-          <b-button type="is-secondary has-text-blue" expanded>
-            Login !
+          <b-button type="is-secondary has-text-primary has-text-weight-bold" expanded>
+            Login
           </b-button>
         </nuxt-link>
       </div>
       <div class="column">
-        <b-button type="is-blue has-text-primary" expanded @click="onSubmit">
-          Sign Up!
+        <b-button type="is-primary has-text-secondary has-text-weight-bold" expanded @click="onSubmit">
+          Sign Up
         </b-button>
       </div>
     </div>
