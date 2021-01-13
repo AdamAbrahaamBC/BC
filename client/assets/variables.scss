@@ -2,13 +2,12 @@
 @import '~bulma/sass/utilities/initial-variables';
 @import "~bulma/sass/utilities/functions";
 
-$primary: #323734;
-$secondary: #999d7f;
+$primary: #2b2b3c;
+$secondary: #f3f3f3;
 $blue: #12c9ff;
 $red: #D11A2A;
 $white: #ffffff;
-$gray: #909494;
-$calico: #E3BF95;
+$gray: #84848e;
 
 $colors: (
     "white": ($white, $black),
@@ -17,8 +16,7 @@ $colors: (
     "secondary": ($secondary, $secondary),
     "blue": ($blue, $blue),
     "red": ($red, $red),
-    "gray": ($gray, $gray),
-    "calico": ($calico, $calico)
+    "gray": ($gray, $gray)
 );
 
 @import "~bulma";

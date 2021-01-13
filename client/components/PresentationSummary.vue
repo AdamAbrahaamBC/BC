@@ -16,12 +16,12 @@
           </div>
         </div>
         <div>
-          <nuxt-link :to="`/presentation/${presentation.presentationId}/${presentation.currentVersion}`" @click.stop>
+          <nuxt-link :to="`/presentation/${presentation.presentationId}/${selectedVersion}`" @click.stop>
             <b-button type="is-success" icon-right="pencil">
               EDIT
             </b-button>
           </nuxt-link>
-          <nuxt-link :to="`/presentation/${presentation.presentationId}/preview`" @click.stop>
+          <nuxt-link :to="`/presentation/${presentation.presentationId}/${selectedVersion}/preview`" @click.stop>
             <b-button type="is-success" icon-right="eye" @click.stop="">
               VIEW
             </b-button>

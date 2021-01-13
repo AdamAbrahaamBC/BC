@@ -32,15 +32,15 @@
         class="slide-list"
         ghost-class="ghost"
       >
-        <div v-for="(slide, index) in presentation.slides" :key="slide + index" class="px-5 py-3" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
-          <div class="box slide px-1 py-1" style="cursor: pointer" @click="switchSlide(index)">
+        <div v-for="(slide, index) in presentation.slides" :key="slide + index" class="px-5 py-5" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
+          <div class="box presentation-slide px-1 py-1" style="cursor: pointer" @click="switchSlide(index)">
             <viewer :initial-value="slide" />
           </div>
         </div>
       </draggable>
     </div>
 
-    <div class="column px-5 py-5 has-background-secondary">
+    <div class="column px-6 py-6 has-background-secondary">
       <editor
         v-if="currentSlide !== null && presentation.slides.length && !showSavePanel"
         :key="currentSlide"

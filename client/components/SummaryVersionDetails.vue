@@ -1,5 +1,5 @@
 <template>
-  <div class="columns mx-0 px-0" style="width: 100%">
+  <div class="columns mx-0 px-0 py-3" style="width: 100%">
     <div class="column is-4">
       <b-carousel
         v-model="currentSlide"
@@ -30,7 +30,10 @@
             class="ml-2"
             @input="$emit('version-changed', selectedVersion)"
           >
-            <b-icon v-if="version === versionDetail.number" icon="circle-medium" />
+            <b-icon
+              v-if="version === versionDetail.number"
+              icon="circle-medium"
+            />
             <span>v{{ version }}</span>
           </b-radio-button>
         </b-field>
@@ -39,11 +42,20 @@
       <div>
         <strong>Description:</strong>
         <br>
-        {{ versionDetail.description ? versionDetail.description : 'This version has no description!' }}
+        {{
+          versionDetail.description
+            ? versionDetail.description
+            : "This version has no description!"
+        }}
       </div>
     </div>
     <div class="column is-2">
-      <b-button type="is-danger float-right" expanded icon-right="delete" @click.stop="deletePresentation">
+      <b-button
+        type="is-danger float-right"
+        expanded
+        icon-right="delete"
+        @click.stop="deletePresentation"
+      >
         DELETE v{{ selectedVersion }}
       </b-button>
     </div>
@@ -65,6 +77,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['version-changed'],
 
   setup (props) {
     const currentSlide = ref(0)
@@ -79,5 +92,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 </style>

@@ -35,6 +35,14 @@ export default {
     '~/plugins/loader.ts',
     { src: '~/plugins/draggable.ts', mode: 'client' }
   ],
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
+  },
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -43,7 +51,8 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
-    '@nuxtjs/composition-api'
+    '@nuxtjs/composition-api',
+    '@nuxtjs/style-resources'
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
