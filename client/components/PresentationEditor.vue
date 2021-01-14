@@ -1,81 +1,112 @@
 <template>
-  <div class="columns mx-0 my-0" style="height: 100vh">
-    <div class="column is-2 has-background-primary px-0 py-0">
-      <div class="menu mx-3 pt-2">
-        <div class="tile">
-          <b-button class="is-success" style="width: 100%" icon-left="content-save-outline" @click="openSavePanel">
-            SAVE
-          </b-button>
-        </div>
-        <div class="tile is-ancestor my-0">
-          <div class="tile is-parent is-8">
-            <b-button class="tile is-child" outlined type="is-secondary" @click="newSlide">
+  <div class="sidebar-page">
+    <section class="sidebar-layout">
+      <b-sidebar
+        open
+        position="static"
+        :type="showSidebar ? 'is-primary' : 'is-secondary'"
+        :fullheight="true"
+        :overlay="false"
+        :reduce="!showSidebar"
+      >
+        <div v-if="showSidebar">
+          <div class="menu mx-3 pt-2">
+            <b-button class="tile is-child" outlined size="is-large" type="is-primary" @click="showSidebar = false">
               <b-icon
-                icon="card-plus-outline"
+                size="is-large"
+                icon="chevron-left"
                 type="is-blue"
               />
             </b-button>
+            <div class="tile">
+              <b-button class="is-success width-100" icon-left="content-save-outline" @click="openSavePanel">
+                SAVE
+              </b-button>
+            </div>
+            <div class="tile is-ancestor my-0">
+              <div class="tile is-parent is-8">
+                <b-button class="tile is-child" outlined type="is-secondary" @click="newSlide">
+                  <b-icon
+                    icon="card-plus-outline"
+                    type="is-blue"
+                  />
+                </b-button>
+              </div>
+              <div class="tile is-parent">
+                <b-button class="tile is-child" type="is-danger" :disabled="presentation.slides.length === 1" @click="deleteSlide">
+                  <b-icon
+                    icon="delete"
+                    type="is-secondary"
+                  />
+                </b-button>
+              </div>
+            </div>
           </div>
-          <div class="tile is-parent">
-            <b-button class="tile is-child" type="is-danger" :disabled="presentation.slides.length === 1" @click="deleteSlide">
-              <b-icon
-                icon="delete"
-                type="is-secondary"
+
+          <draggable
+            :list="presentation.slides"
+            class="slide-list"
+            ghost-class="ghost"
+          >
+            <div v-for="(slide, index) in presentation.slides" :key="slide + index" class="px-5 py-5" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
+              <div class="box presentation-slide px-1 py-1" style="cursor: pointer" @click="switchSlide(index)">
+                <viewer :initial-value="slide" />
+              </div>
+            </div>
+          </draggable>
+        </div>
+        <b-button
+          v-else
+          class="tile is-child"
+          size="is-large"
+          type="is-secondary"
+          @click="showSidebar = true"
+        >
+          <b-icon
+            size="is-large"
+            icon="chevron-right"
+            type="is-primary"
+          />
+        </b-button>
+      </b-sidebar>
+
+      <div :class="{'pl-6': showSidebar}" class="pr-6 py-6 width-100 has-background-secondary">
+        <editor
+          v-if="currentSlide !== null && presentation.slides.length && !showSavePanel"
+          :key="currentSlide"
+          ref="editorRef"
+          :options="options"
+          :initial-value="presentation.slides[currentSlide]"
+          height="100%"
+          class="box px-2 py-2"
+          @blur="saveSlideContent"
+        />
+        <div v-else-if="showSavePanel" class="columns is-centered is-vcentered height-100">
+          <div class="box has-background-primary" style="width: 50vw">
+            <b-field label="Presentation title" custom-class="has-text-white">
+              <b-input
+                v-model="presentation.title"
+                maxlength="30"
+                required
               />
+            </b-field>
+            <b-field label="Version" custom-class="has-text-white">
+              <b-numberinput v-model="presentation.versionNumber" type="is-white" />
+            </b-field>
+            <b-field label="Version description" custom-class="has-text-white">
+              <b-input
+                v-model="presentation.description"
+                maxlength="100"
+                type="textarea"
+              />
+            </b-field>
+            <b-button class="is-success width-100" icon-left="content-save-outline" @click="confirmSave">
+              SAVE PRESENTATION
             </b-button>
           </div>
         </div>
       </div>
-
-      <draggable
-        :list="presentation.slides"
-        class="slide-list"
-        ghost-class="ghost"
-      >
-        <div v-for="(slide, index) in presentation.slides" :key="slide + index" class="px-5 py-5" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
-          <div class="box presentation-slide px-1 py-1" style="cursor: pointer" @click="switchSlide(index)">
-            <viewer :initial-value="slide" />
-          </div>
-        </div>
-      </draggable>
-    </div>
-
-    <div class="column px-6 py-6 has-background-secondary">
-      <editor
-        v-if="currentSlide !== null && presentation.slides.length && !showSavePanel"
-        :key="currentSlide"
-        ref="editorRef"
-        :options="options"
-        :initial-value="presentation.slides[currentSlide]"
-        height="100%"
-        class="box px-2 py-2"
-        @blur="saveSlideContent"
-      />
-      <div v-else-if="showSavePanel" class="columns is-centered is-vcentered" style="height: 100%">
-        <div class="box has-background-primary" style="width: 50vw">
-          <b-field label="Presentation title" custom-class="has-text-white">
-            <b-input
-              v-model="presentation.title"
-              maxlength="30"
-              required
-            />
-          </b-field>
-          <b-field label="Version" custom-class="has-text-white">
-            <b-numberinput v-model="presentation.versionNumber" type="is-white" />
-          </b-field>
-          <b-field label="Version description" custom-class="has-text-white">
-            <b-input
-              v-model="presentation.description"
-              maxlength="100"
-              type="textarea"
-            />
-          </b-field>
-          <b-button class="is-success" style="width: 100%" icon-left="content-save-outline" @click="confirmSave">
-            SAVE PRESENTATION
-          </b-button>
-        </div>
-      </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -94,6 +125,7 @@ interface State {
   slideContent: string
   editorRef: any
   showSavePanel: boolean
+  showSidebar: boolean
 }
 
 export default defineComponent({
@@ -117,7 +149,8 @@ export default defineComponent({
       currentSlide: 0,
       slideContent: '',
       editorRef: null,
-      showSavePanel: false
+      showSavePanel: false,
+      showSidebar: true
     })
 
     function newSlide (): void {
@@ -189,5 +222,5 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="scss">
 </style>
