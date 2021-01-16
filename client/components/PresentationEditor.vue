@@ -11,13 +11,24 @@
       >
         <div v-if="showSidebar">
           <div class="menu mx-3 pt-2">
-            <b-button class="tile is-child" outlined size="is-large" type="is-primary" @click="showSidebar = false">
-              <b-icon
-                size="is-large"
-                icon="chevron-left"
-                type="is-blue"
-              />
-            </b-button>
+            <div class="tile is-ancestor my-0">
+              <div class="tile is-parent is-8">
+                <nuxt-link to="/">
+                  <b-button class="is-primary width-100 has-text-blue" icon-left="home-outline">
+                    HOME
+                  </b-button>
+                </nuxt-link>
+              </div>
+              <div class="tile is-parent">
+                <b-button class="tile is-child" outlined type="is-primary" @click="showSidebar = false">
+                  <b-icon
+                    size="is-large"
+                    icon="chevron-left"
+                    type="is-blue"
+                  />
+                </b-button>
+              </div>
+            </div>
             <div class="tile">
               <b-button class="is-success width-100" icon-left="content-save-outline" @click="openSavePanel">
                 SAVE
@@ -113,7 +124,8 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs, useContext } from '@nuxtjs/composition-api'
 import { DialogProgrammatic as dialog, ToastProgrammatic as Toast } from 'buefy'
-import { PresentationEditable } from '../models/presentation/PresentationEditable'
+import { PresentationEditable } from '~/models/presentation/PresentationEditable'
+import EditorSavePanel from '~/components/Editor/EditorSavePanel.vue'
 
 interface State {
   options: {
@@ -129,6 +141,8 @@ interface State {
 }
 
 export default defineComponent({
+  components: { EditorSavePanel },
+
   layout: 'editor',
 
   props: {
