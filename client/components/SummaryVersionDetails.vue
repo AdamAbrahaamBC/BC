@@ -17,36 +17,24 @@
       </b-carousel>
     </div>
     <div class="column is-6">
-      <div class="is-flex">
-        <strong>Versions:</strong>
-        <b-field>
-          <b-radio-button
-            v-for="version in versions"
-            :key="version"
-            v-model="selectedVersion"
-            :native-value="version"
-            type="is-success"
-            size="is-small"
-            class="ml-2"
-            @input="$emit('version-changed', selectedVersion)"
+      <div>
+        <strong>Versions:</strong><br>
+        <span v-for="version in versions" :key="version" class="mr-2" @click="versionChanged(version)">
+          <b-tag
+            :type="version === versionDetail.number ? 'is-blue' : 'is-secondary'"
+            :class="version === versionDetail.number ? 'has-text-primary' : 'has-text-primary'"
+            size="is-medium"
+            class="border-primary clickable"
           >
-            <b-icon
-              v-if="version === versionDetail.number"
-              icon="circle-medium"
-            />
-            <span>v{{ version }}</span>
-          </b-radio-button>
-        </b-field>
+            v{{ version }}
+          </b-tag>
+        </span>
       </div>
       <br>
       <div>
         <strong>Description:</strong>
         <br>
-        {{
-          versionDetail.description
-            ? versionDetail.description
-            : "This version has no description!"
-        }}
+        {{ versionDetail.description ? versionDetail.description : "This version has no description!" }}
       </div>
     </div>
     <div class="column is-2">
@@ -79,13 +67,21 @@ export default defineComponent({
   },
   emits: ['version-changed'],
 
-  setup (props) {
+  setup (props, { emit }) {
     const currentSlide = ref(0)
     const selectedVersion = ref(props.versionDetail.number)
 
+    const versionChanged = (newValue: number) => {
+      if (newValue !== selectedVersion.value) {
+        emit('version-changed', newValue)
+        currentSlide.value = 0
+      }
+    }
+
     return {
       currentSlide,
-      selectedVersion
+      selectedVersion,
+      versionChanged
     }
   }
 })

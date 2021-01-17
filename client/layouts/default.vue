@@ -1,28 +1,18 @@
 <template>
-  <div style="min-height: 100vh" class="has-background-primary">
-    <div class="hero">
-      <div class="hero-body">
-        <div class="box has-background-secondary">
-          <div class="level">
-            <h1 class="title has-text-primary level-left mb-0">
-              {{ `# Hi, ${app.$auth.user.firstName} ${app.$auth.user.lastName} !` }}
-            </h1>
-            <b-button
-              type="is-primary has-text-blue"
-              class="level-right"
-              icon-left="logout"
-              @click="$auth.logout()"
-            >
-              <h2 class="subtitle has-text-blue">
-                Logout
-              </h2>
-            </b-button>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div style="min-height: 100vh">
+    <b-navbar centered spaced type="is-primary">
+      <template #end>
+        <b-navbar-item tag="div">
+          <b-button type="is-blue has-text-primary" @click="$auth.logout()">
+            <h2 class="subtitle has-text-primary">
+              Logout
+            </h2>
+          </b-button>
+        </b-navbar-item>
+      </template>
+    </b-navbar>
 
-    <nuxt class="container" />
+    <nuxt />
   </div>
 </template>
 

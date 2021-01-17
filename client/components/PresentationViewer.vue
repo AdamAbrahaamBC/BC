@@ -43,8 +43,7 @@ export default defineComponent({
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: 100vh;
-    padding-left: 32px;
-    padding-right: 32px;
+    padding: 32px 32px 0px 32px;
   }
 
   .reveal .slides {

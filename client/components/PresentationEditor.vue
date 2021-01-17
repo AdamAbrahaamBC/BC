@@ -13,11 +13,9 @@
           <div class="menu mx-3 pt-2">
             <div class="tile is-ancestor my-0">
               <div class="tile is-parent is-8">
-                <nuxt-link to="/">
-                  <b-button class="is-primary width-100 has-text-blue" icon-left="home-outline">
-                    HOME
-                  </b-button>
-                </nuxt-link>
+                <b-button tag="nuxt-link" to="/" class="is-primary width-100 has-text-blue" icon-left="home-outline">
+                  HOME
+                </b-button>
               </div>
               <div class="tile is-parent">
                 <b-button class="tile is-child" outlined type="is-primary" @click="showSidebar = false">
@@ -60,7 +58,7 @@
             ghost-class="ghost"
           >
             <div v-for="(slide, index) in presentation.slides" :key="slide + index" class="px-5 py-5" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
-              <div class="box presentation-slide px-1 py-1" style="cursor: pointer" @click="switchSlide(index)">
+              <div class="box presentation-slide px-1 py-1 clickable" @click="switchSlide(index)">
                 <viewer :initial-value="slide" />
               </div>
             </div>
