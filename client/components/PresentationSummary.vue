@@ -6,26 +6,37 @@
           <b-icon :icon="isOpen ? 'chevron-up' : 'chevron-down'" class="mr-3 is-hidden-mobile" />
           <div>
             <strong class="has-text-white">{{ presentation.title }}</strong>
-            <b-tag rounded outlined type="is-success">
-              v{{ presentation.currentVersion }}
+            <b-tag rounded type="is-primary" class="ml-1 has-text-blue border-secondary">
+              Latest: v{{ presentation.currentVersion }}
             </b-tag>
-            <p class="is-size-7 mt-2 has-text-blue">
+            <p class="is-size-7 mt-2 has-text-gray">
               last edited: {{ presentation.lastEdited }}<br>
-              more info...
+              click for more...
             </p>
           </div>
         </div>
+
         <div>
-          <nuxt-link :to="`/presentation/${presentation.presentationId}/${selectedVersion}`" @click.stop>
-            <b-button type="is-success" icon-right="pencil">
-              EDIT
-            </b-button>
-          </nuxt-link>
-          <nuxt-link :to="`/presentation/${presentation.presentationId}/${selectedVersion}/preview`" @click.stop>
-            <b-button type="is-success" icon-right="eye" @click.stop="">
-              VIEW
-            </b-button>
-          </nuxt-link>
+          <b-button
+            tag="nuxt-link"
+            :to="`/presentation/${presentation.presentationId}/${selectedVersion}`"
+            type="is-secondary"
+            class="has-text-weight-normal"
+            outlined
+            icon-right="pencil"
+          >
+            EDIT
+          </b-button>
+          <b-button
+            tag="nuxt-link"
+            :to="`/presentation/${presentation.presentationId}/${selectedVersion}/preview`"
+            type="is-secondary"
+            class="has-text-weight-normal"
+            outlined
+            icon-right="eye"
+          >
+            VIEW
+          </b-button>
           <b-button type="is-danger" icon-right="delete" @click.stop="deletePresentation">
             DELETE
           </b-button>
@@ -33,7 +44,13 @@
       </div>
     </template>
     <div class="panel-block has-background-secondary">
-      <SummaryVersionDetails v-if="versionDetail" :version-detail="versionDetail" :versions="versions" @version-changed="selectedVersion = $event" />
+      <SummaryVersionDetails
+        v-if="versionDetail"
+        :key="versionDetail.number"
+        :version-detail="versionDetail"
+        :versions="versions"
+        @version-changed="selectedVersion = $event"
+      />
       <loader v-else />
     </div>
   </b-collapse>

@@ -30,11 +30,9 @@
 
     <div class="columns mt-5">
       <div class="column">
-        <nuxt-link to="/register">
-          <b-button type="is-secondary has-text-primary has-text-weight-bold" expanded>
-            Register
-          </b-button>
-        </nuxt-link>
+        <b-button tag="nuxt-link" to="/register" type="is-secondary has-text-primary has-text-weight-bold" expanded>
+          Register
+        </b-button>
       </div>
       <div class="column">
         <b-button type="is-primary has-text-secondary has-text-weight-bold" expanded @click="onSubmit">

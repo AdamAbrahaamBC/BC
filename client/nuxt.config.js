@@ -13,9 +13,6 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
 
@@ -25,7 +22,8 @@ export default {
     { src: '@/assets/helpers.scss', lang: 'sass' },
     { src: '@/assets/editor.scss', lang: 'sass' },
     { src: '@/assets/loader.scss', lang: 'sass' },
-    { src: '@/assets/presentationSummary.scss', lang: 'sass' }
+    { src: '@/assets/presentationSummary.scss', lang: 'sass' },
+    { src: '@/assets/fonts.scss', lang: 'sass' }
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)

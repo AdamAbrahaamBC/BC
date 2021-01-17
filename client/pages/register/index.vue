@@ -48,11 +48,9 @@
 
     <div class="columns mt-5">
       <div class="column">
-        <nuxt-link to="/login">
-          <b-button type="is-secondary has-text-primary has-text-weight-bold" expanded>
-            Login
-          </b-button>
-        </nuxt-link>
+        <b-button tag="nuxt-link" to="/login" type="is-secondary has-text-primary has-text-weight-bold" expanded>
+          Login
+        </b-button>
       </div>
       <div class="column">
         <b-button type="is-primary has-text-secondary has-text-weight-bold" expanded @click="onSubmit">
