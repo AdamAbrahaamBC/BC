@@ -58,10 +58,9 @@
 
 <script lang="ts">
 import { defineComponent, toRefs, reactive, useContext, computed, ComputedRef } from '@nuxtjs/composition-api'
-import { DialogProgrammatic as dialog } from 'buefy'
 import { PresentationSummary } from '~/models/presentation/PresentationSummary'
 import { PresentationDetail, PresentationVersion } from '~/models/presentation/PresentationDetail'
-import { useFetchUserData } from '~/composable/fetchUserData'
+import { useDialogs } from '~/composable/dialogs'
 import SummaryVersionDetails from '~/components/SummaryVersionDetails.vue'
 
 interface State {
@@ -84,7 +83,7 @@ export default defineComponent({
 
   setup (props: any) {
     const { app: { $axios } } = useContext()
-    const { fetchUserData } = useFetchUserData()
+    const { deletePresentationDialog } = useDialogs()
     const state: any = reactive<State>({
       isOpen: false,
       presentationDetail: null,
@@ -105,24 +104,7 @@ export default defineComponent({
     }
 
     function deletePresentation (): void {
-      dialog.prompt({
-        title: 'Deleting presentation',
-        message: `Are you sure you want to <b>delete</b> this presentation? This action cannot be undone.\nTo delete type <b>${props.presentation.title}</b> below.`,
-        inputAttrs: {
-          placeholder: props.presentation.title
-        },
-        confirmText: 'Delete',
-        type: 'is-danger',
-        hasIcon: true,
-        closeOnConfirm: false,
-        onConfirm: async (value, { close }) => {
-          if (value === props.presentation.title) {
-            await $axios.delete('/presentation', { params: { id: props.presentation.presentationId } })
-            fetchUserData()
-            close()
-          }
-        }
-      })
+      deletePresentationDialog(props.presentation.title, props.presentation.presentationId)
     }
 
     return {
