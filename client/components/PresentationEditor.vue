@@ -123,7 +123,6 @@
 import { defineComponent, reactive, toRefs, useContext } from '@nuxtjs/composition-api'
 import { DialogProgrammatic as dialog, ToastProgrammatic as Toast } from 'buefy'
 import { PresentationEditable } from '~/models/presentation/PresentationEditable'
-import EditorSavePanel from '~/components/Editor/EditorSavePanel.vue'
 
 interface State {
   options: {
@@ -139,8 +138,6 @@ interface State {
 }
 
 export default defineComponent({
-  components: { EditorSavePanel },
-
   layout: 'editor',
 
   props: {
