@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import { defineComponent, useContext } from '@nuxtjs/composition-api'
-import { usePresentationFetch } from '~/composable/loadPresentation'
+import { usePresentationFetch } from '~/composable/fetchPresentation'
 import PresentationEditor from '~/components/PresentationEditor.vue'
 
 export default defineComponent({

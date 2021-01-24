@@ -1,12 +1,13 @@
-import { ref, useFetch, useContext } from '@nuxtjs/composition-api'
-import { PresentationDetail, PresentationVersion } from '~/models/presentation/PresentationDetail'
+import { ref, useContext } from '@nuxtjs/composition-api'
+import { ToastProgrammatic as Toast } from 'buefy'
 import { PresentationEditable } from '~/models/presentation/PresentationEditable'
+import { PresentationDetail, PresentationVersion } from '~/models/presentation/PresentationDetail'
 
-export const usePresentationFetch = (id: string, version: number) => {
+export const usePresentationRepository = () => {
   const { app: { $axios } } = useContext()
   const presentation = ref<PresentationEditable | null>(null)
 
-  useFetch(async () => {
+  const loadPresentation = async (id: string, version: number) => {
     await $axios.get('/presentation', { params: { id } })
       .then((response) => {
         const presentationDetail: PresentationDetail = response.data
@@ -22,7 +23,16 @@ export const usePresentationFetch = (id: string, version: number) => {
           }
         }
       })
-  })
+  }
 
-  return { presentation }
+  const savePresentation = (presentation: PresentationEditable) => {
+    $axios.post('/presentation', { presentation })
+    Toast.open({ message: 'Successfully saved!', type: 'is-success', position: 'is-bottom' })
+  }
+
+  return {
+    presentation,
+    savePresentation,
+    loadPresentation
+  }
 }

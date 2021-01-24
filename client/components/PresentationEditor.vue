@@ -121,8 +121,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, useContext } from '@nuxtjs/composition-api'
-import { DialogProgrammatic as dialog, ToastProgrammatic as Toast } from 'buefy'
 import { PresentationEditable } from '~/models/presentation/PresentationEditable'
+import { useDialogs } from '~/composable/dialogs'
+import { usePresentationRepository } from '~/composable/presentationRepository'
 
 interface State {
   options: {
@@ -148,7 +149,9 @@ export default defineComponent({
   },
 
   setup (props: any) {
-    const { app, params } = useContext()
+    const { params } = useContext()
+    const { deleteSlideDialog, overwritePresentationDialog } = useDialogs()
+    const { savePresentation } = usePresentationRepository()
     const state: any = reactive<State>({
       options: {
         usageStatistics: false,
@@ -173,17 +176,7 @@ export default defineComponent({
     }
 
     function deleteSlide (): void {
-      dialog.confirm({
-        title: 'Deleting slide',
-        message: 'Are you sure you want to <b>delete</b> this slide? This action cannot be undone.',
-        confirmText: 'Delete',
-        type: 'is-danger',
-        hasIcon: true,
-        onConfirm: () => {
-          state.presentation.slides.splice(state.currentSlide, 1)
-          state.currentSlide = state.currentSlide >= state.presentation.slides.length ? state.presentation.slides.length - 1 : state.currentSlide
-        }
-      })
+      deleteSlideDialog(state.presentation.slides, state.currentSlide)
     }
 
     function openSavePanel (): void {
@@ -198,24 +191,10 @@ export default defineComponent({
 
     function confirmSave (): void {
       if (state.presentation.versionNumber <= Number(params.value.version)) {
-        dialog.confirm({
-          title: 'Overwriting changes',
-          message: 'This version is already saved. Are you sure you want to <b>overwright</b> it? This action cannot be undone.',
-          confirmText: 'Save',
-          type: 'is-warning',
-          hasIcon: true,
-          onConfirm: () => {
-            savePresentation()
-          }
-        })
+        overwritePresentationDialog(state.presentation)
       } else {
-        savePresentation()
+        savePresentation(state.presentation)
       }
-    }
-
-    function savePresentation (): void {
-      app.$axios.post('/presentation', { presentation: state.presentation })
-      Toast.open({ message: 'Successfully saved!', type: 'is-sucess', position: 'is-bottom' })
     }
 
     return {
