@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import * as jwt from 'jsonwebtoken'
-import { IUser } from "../models/userModels";
 
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
   const authHeader: string = req.headers['authorization']

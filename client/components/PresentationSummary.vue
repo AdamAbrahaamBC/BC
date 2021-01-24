@@ -59,9 +59,10 @@
 <script lang="ts">
 import { defineComponent, toRefs, reactive, useContext, computed, ComputedRef } from '@nuxtjs/composition-api'
 import { DialogProgrammatic as dialog } from 'buefy'
-import { PresentationSummary } from '../models/presentation/PresentationSummary'
-import { PresentationDetail, PresentationVersion } from '../models/presentation/PresentationDetail'
-import SummaryVersionDetails from '../components/SummaryVersionDetails.vue'
+import { PresentationSummary } from '~/models/presentation/PresentationSummary'
+import { PresentationDetail, PresentationVersion } from '~/models/presentation/PresentationDetail'
+import { useFetchUserData } from '~/composable/fetchUserData'
+import SummaryVersionDetails from '~/components/SummaryVersionDetails.vue'
 
 interface State {
   isOpen: boolean
@@ -82,7 +83,8 @@ export default defineComponent({
   },
 
   setup (props: any) {
-    const { app } = useContext()
+    const { app: { $axios } } = useContext()
+    const { fetchUserData } = useFetchUserData()
     const state: any = reactive<State>({
       isOpen: false,
       presentationDetail: null,
@@ -96,7 +98,7 @@ export default defineComponent({
     })
 
     function loadPresentationDetails (): void {
-      app.$axios.get('/presentation', { params: { id: props.presentation.presentationId } })
+      $axios.get('/presentation', { params: { id: props.presentation.presentationId } })
         .then((response) => {
           state.presentationDetail = response.data
         })
@@ -115,8 +117,9 @@ export default defineComponent({
         closeOnConfirm: false,
         onConfirm: async (value, { close }) => {
           if (value === props.presentation.title) {
+            await $axios.delete('/presentation', { params: { id: props.presentation.presentationId } })
+            fetchUserData()
             close()
-            await app.$axios.delete('/presentation', { params: { id: props.presentation.presentationId } })
           }
         }
       })

@@ -13,5 +13,6 @@ export class UserRoutes {
 
   public routes(): void {
     this.router.get("/", authenticateJWT, this.userController.getCurrentUser)
+    this.router.get("/presentations", authenticateJWT, this.userController.getUserPresentations)
   }
 }

@@ -54,7 +54,7 @@ export class PresentationController {
       const presentationId: string = req.query.id as string
       presentationRepository.deletePresentation(user, presentationId)
 
-      res.status(200)
+      res.status(200).json("DELETED")
     } catch {
       res.status(500)
     }

@@ -21,14 +21,17 @@
         Your presentations:
       </h1>
       <div class="box has-background-white mb-6">
-        <div v-if="presentations && presentations.length" class="mx-5 my-5">
+        <Loader v-if="isFetching" />
+
+        <div v-else-if="$auth.user.presentations && $auth.user.presentations.length" class="mx-5 my-5">
           <PresentationSummary
-            v-for="presentation in presentations"
+            v-for="presentation in $auth.user.presentations"
             :key="presentation.presentationId"
             :presentation="presentation"
           />
         </div>
-        <h1 v-else class="is-size-4 is-italic mx-5 my-5 has-text-gray has-text-centered">
+
+        <h1 v-else class="is-size-5 is-italic mx-5 my-5 has-text-gray has-text-centered">
           You have no presentations yet, click the button above to create your first one
         </h1>
       </div>
@@ -37,20 +40,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useContext, ref } from '@nuxtjs/composition-api'
-import { PresentationSummary as PresentationSummaryModel } from '../models/presentation/PresentationSummary'
+import { defineComponent, onMounted } from '@nuxtjs/composition-api'
+import { useFetchUserData } from '~/composable/fetchUserData'
 import PresentationSummary from '~/components/PresentationSummary.vue'
 
 export default defineComponent({
   components: { PresentationSummary },
   setup () {
-    const { app: { $auth } } = useContext()
-    const presentations = ref<PresentationSummaryModel[]>(
-      $auth.user.presentations
-    )
+    const { fetchUserData, isFetching } = useFetchUserData()
+
+    onMounted(() => {
+      fetchUserData()
+    })
 
     return {
-      presentations
+      isFetching
     }
   }
 })

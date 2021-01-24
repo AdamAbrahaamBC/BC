@@ -10,9 +10,10 @@ class PresentationRepository {
     return Presentation.findById(presentationId)
   }
 
-  public async deletePresentation(user: IUser, presentationId: string): Promise<IPresentation> {
-    await userRepository.deletePresentationSummary(user, presentationId)
-    return Presentation.findByIdAndDelete(presentationId)
+  public async deletePresentation(user: IUser, presentationId: string): Promise<void> {
+    userRepository.deletePresentationSummary(user, presentationId)
+    console.log(presentationId);
+    await Presentation.findByIdAndDelete(presentationId)
   }
 
   public async newPresentation(user: IUser, presentationData: IPresentationRequest): Promise<IPresentation> {

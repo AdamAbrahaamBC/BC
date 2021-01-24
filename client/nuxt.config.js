@@ -59,7 +59,7 @@ export default {
     ['nuxt-buefy', { css: true }],
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth-next'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -86,10 +86,18 @@ export default {
   auth: {
     strategies: {
       local: {
+        token: {
+          property: 'token',
+          required: true
+        },
+        user: {
+          property: 'user',
+          autoFetch: true
+        },
         endpoints: {
-          login: { url: '/auth/login', method: 'post', propertyName: 'token' },
+          login: { url: '/auth/login', method: 'post' },
           logout: false,
-          user: { url: '/user', method: 'get', propertyName: 'user' }
+          user: { url: '/user', method: 'get' }
         }
       }
     },
