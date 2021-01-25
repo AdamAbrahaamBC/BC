@@ -3,6 +3,7 @@ import { IUser, IUserRequest } from "../models/userModels";
 import { IPresentationRequest, IPresentationSummary } from "../models/presentationModels";
 import passwordHasher from '../services/passwordHasher';
 import * as jwt from 'jsonwebtoken';
+import dayjs from 'dayjs'
 
 const saltRounds: number = 10
 
@@ -45,7 +46,7 @@ class UserRepository {
   public async newPresentationSummary(user: IUser, presentation: IPresentationRequest): Promise<IUser> {
     const presentationSummary: IPresentationSummary = {
       presentationId: presentation.id,
-      lastEdited: new Date().toLocaleString('sk'),
+      lastEdited: dayjs().format('DD.MM.YYYY HH:MM'),
       title: presentation.title,
       currentVersion: presentation.versionNumber
     }
@@ -58,9 +59,9 @@ class UserRepository {
   public async updatePresentationSummary(user: IUser, presentation: IPresentationRequest): Promise<IUser> {
     const presentationSummary: IPresentationSummary = user.presentations.find(x => x.presentationId.toString() === presentation.id)
     presentationSummary.title = presentation.title
-    presentationSummary.lastEdited = new Date().toLocaleString('sk')
+    presentationSummary.lastEdited = dayjs().format('DD.MM.YYYY HH:MM'),
 
-    user.markModified('presentations')
+      user.markModified('presentations')
 
     return user.save()
   }
