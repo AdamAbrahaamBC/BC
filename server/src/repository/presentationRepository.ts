@@ -12,7 +12,6 @@ class PresentationRepository {
 
   public async deletePresentation(user: IUser, presentationId: string): Promise<void> {
     userRepository.deletePresentationSummary(user, presentationId)
-    console.log(presentationId);
     await Presentation.findByIdAndDelete(presentationId)
   }
 
