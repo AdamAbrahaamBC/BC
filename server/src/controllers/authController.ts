@@ -45,8 +45,8 @@ export class AuthController {
         .then((token: string) => {
           res.status(200).json({ token })
         })
-        .catch((error: string) => {
-          res.status(401).json(error)
+        .catch(() => {
+          res.status(401).json("Incorrect password!")
         })
     } catch {
       res.status(500)

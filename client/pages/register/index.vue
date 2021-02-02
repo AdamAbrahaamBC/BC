@@ -12,7 +12,6 @@
     <form v-if="!isLoading" @submit.prevent="onSubmit">
       <b-field label="First name" custom-class="has-text-gray">
         <b-input
-          ref="firstNameRef"
           v-model="userData.firstName"
           type="text"
           maxlength="30"
@@ -21,7 +20,6 @@
       </b-field>
       <b-field label="Last name" custom-class="has-text-gray">
         <b-input
-          ref="lastNameRef"
           v-model="userData.lastName"
           type="text"
           maxlength="30"
@@ -30,7 +28,6 @@
       </b-field>
       <b-field label="Email" custom-class="has-text-gray">
         <b-input
-          ref="emailRef"
           v-model="userData.email"
           type="email"
           maxlength="30"
@@ -39,7 +36,6 @@
       </b-field>
       <b-field label="Password" custom-class="has-text-gray">
         <b-input
-          ref="passwordRef"
           v-model="userData.password"
           type="password"
           password-reveal
@@ -66,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, reactive, useContext, ref } from '@nuxtjs/composition-api'
+import { defineComponent, toRefs, reactive, useContext } from '@nuxtjs/composition-api'
 import { ApiErrorResponse } from '../../models/error/ApiErrorResponse'
 
 export default defineComponent({
@@ -76,10 +72,6 @@ export default defineComponent({
   setup () {
     const { app: { $axios, $auth, router } } = useContext()
     const state = reactive({
-      emailRef: ref(null),
-      passwordRef: ref(null),
-      firstNameRef: ref(null),
-      lastNameRef: ref(null),
       error: '',
       isLoading: false,
       userData: {
@@ -91,18 +83,6 @@ export default defineComponent({
     })
 
     function onSubmit () {
-      if (!state.userData.email || !state.userData.password || !state.userData.firstName || !state.userData.lastName) {
-        return
-      }
-
-      if (!state.emailRef || !state.passwordRef || !state.firstNameRef || !state.lastNameRef) {
-        return
-      }
-
-      if (!state.emailRef.isValid || !state.passwordRef.isValid || !state.firstNameRef.isValid || !state.lastNameRef.isValid) {
-        return
-      }
-
       state.isLoading = true
       $axios.post('/auth/register', { ...state.userData })
         .then(() => {
