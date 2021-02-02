@@ -12,7 +12,6 @@
     <form v-if="!isLoading" @submit.prevent="onSubmit">
       <b-field label="Email" custom-class="has-text-gray">
         <b-input
-          ref="emailRef"
           v-model="userData.email"
           type="email"
           maxlength="30"
@@ -21,7 +20,6 @@
       </b-field>
       <b-field label="Password" custom-class="has-text-gray">
         <b-input
-          ref="passwordRef"
           v-model="userData.password"
           type="password"
           password-reveal
@@ -58,8 +56,6 @@ export default defineComponent({
   setup () {
     const { app: { $auth, router } } = useContext()
     const state = reactive({
-      emailRef: null,
-      passwordRef: null,
       error: '',
       isLoading: false,
       userData: {
@@ -69,18 +65,6 @@ export default defineComponent({
     })
 
     function onSubmit () {
-      if (!state.userData.email || !state.userData.password) {
-        return
-      }
-
-      if (!state.emailRef || !state.passwordRef) {
-        return
-      }
-
-      if (!state.emailRef.isValid || !state.passwordRef.isValid) {
-        return
-      }
-
       state.isLoading = true
       $auth.loginWith('local', { data: state.userData })
         .then(() => {
