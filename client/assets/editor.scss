@@ -11,17 +11,17 @@
 }
 
 .menu {
-  height: 20vh;
+  height: 120px;
 }
 
 .slide-list {
   overflow-y: auto;
-  height: 80vh;
+  height: calc(100vh - 120px);
 }
 
 .presentation-slide {
   overflow: hidden;
-  height: 15vh;
+  height: 140px;
 }
 
 .ghost {

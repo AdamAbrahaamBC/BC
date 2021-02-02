@@ -31,7 +31,8 @@ export default {
     '~/plugins/editor.ts',
     '~/plugins/viewer.ts',
     '~/plugins/loader.ts',
-    { src: '~/plugins/draggable.ts', mode: 'client' }
+    { src: '~/plugins/draggable.ts', mode: 'client' },
+    { src: '~/plugins/persisted-store', mode: 'client' }
   ],
   module: {
     rules: [
