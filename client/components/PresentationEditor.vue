@@ -4,40 +4,24 @@
       <b-sidebar
         open
         position="static"
-        :type="showSidebar ? 'is-primary' : 'is-secondary'"
+        type="is-primary"
         :fullheight="true"
         :overlay="false"
-        :reduce="!showSidebar"
+        :reduce="!showSlides"
       >
-        <div v-if="showSidebar">
+        <div v-if="showSlides">
           <div class="menu mx-3 pt-2">
+            <b-button class="tile is-child" type="is-primary" @click="showSlides = false">
+              <b-icon
+                icon="chevron-left"
+                type="is-blue"
+              />
+            </b-button>
             <div class="tile is-ancestor my-0">
               <div class="tile is-parent is-8">
-                <b-button tag="nuxt-link" to="/" class="is-primary width-100 has-text-blue" icon-left="home-outline">
-                  HOME
-                </b-button>
-              </div>
-              <div class="tile is-parent">
-                <b-button class="tile is-child" outlined type="is-primary" @click="showSidebar = false">
-                  <b-icon
-                    size="is-large"
-                    icon="chevron-left"
-                    type="is-blue"
-                  />
-                </b-button>
-              </div>
-            </div>
-            <div class="tile">
-              <b-button class="is-success width-100" icon-left="content-save-outline" @click="openSavePanel">
-                SAVE
-              </b-button>
-            </div>
-            <div class="tile is-ancestor my-0">
-              <div class="tile is-parent is-8">
-                <b-button class="tile is-child" outlined type="is-secondary" @click="newSlide">
+                <b-button class="tile is-child" outlined type="is-blue" @click="newSlide">
                   <b-icon
                     icon="card-plus-outline"
-                    type="is-blue"
                   />
                 </b-button>
               </div>
@@ -64,22 +48,84 @@
             </div>
           </draggable>
         </div>
-        <b-button
-          v-else
-          class="tile is-child"
-          size="is-large"
-          type="is-secondary"
-          @click="showSidebar = true"
-        >
-          <b-icon
-            size="is-large"
-            icon="chevron-right"
-            type="is-primary"
-          />
-        </b-button>
+
+        <div v-else class="has-text-centered">
+          <b-tooltip
+            label="Home"
+            type="is-secondary"
+            position="is-bottom"
+            class="my-5"
+          >
+            <b-button
+              size="is-large"
+              class="is-primary"
+              @click="toHomescreen"
+            >
+              <b-icon
+                size="is-medium"
+                icon="home"
+                type="is-blue"
+              />
+            </b-button>
+          </b-tooltip>
+          <b-tooltip
+            label="Save"
+            type="is-success"
+            position="is-bottom"
+            class="my-5"
+          >
+            <b-button
+              size="is-large"
+              type="is-success"
+              @click="showSavePanel = !showSavePanel"
+            >
+              <b-icon
+                size="is-medium"
+                icon="content-save"
+                type="is-secondary"
+              />
+            </b-button>
+          </b-tooltip>
+          <b-tooltip
+            label="Preview"
+            type="is-secondary"
+            position="is-bottom"
+            class="my-5"
+          >
+            <b-button
+              size="is-large"
+              type="is-blue"
+              @click="openPreview"
+            >
+              <b-icon
+                size="is-medium"
+                icon="eye"
+                type="is-primary"
+              />
+            </b-button>
+          </b-tooltip>
+          <b-tooltip
+            label="Slides"
+            type="is-secondary"
+            position="is-bottom"
+            class="my-5"
+          >
+            <b-button
+              size="is-large"
+              type="is-blue"
+              outlined
+              @click="showSlides = true"
+            >
+              <b-icon
+                size="is-medium"
+                icon="buffer"
+              />
+            </b-button>
+          </b-tooltip>
+        </div>
       </b-sidebar>
 
-      <div :class="{'pl-6': showSidebar}" class="pr-6 py-6 width-100 has-background-secondary">
+      <div class="px-6 py-6 width-100 has-background-secondary">
         <editor
           v-if="currentSlide !== null && presentation.slides.length && !showSavePanel"
           :key="currentSlide"
@@ -124,6 +170,7 @@ import { defineComponent, reactive, toRefs, useContext } from '@nuxtjs/compositi
 import { PresentationEditable } from '~/models/presentation/PresentationEditable'
 import { useDialogs } from '~/composable/dialogs'
 import { usePresentationRepository } from '~/composable/presentationRepository'
+import { PresentationStore, usePresentationStore } from '~/composable/presentationStore'
 
 interface State {
   options: {
@@ -135,7 +182,7 @@ interface State {
   slideContent: string
   editorRef: any
   showSavePanel: boolean
-  showSidebar: boolean
+  showSlides: boolean
 }
 
 export default defineComponent({
@@ -149,9 +196,10 @@ export default defineComponent({
   },
 
   setup (props: any) {
-    const { params } = useContext()
-    const { deleteSlideDialog, overwritePresentationDialog } = useDialogs()
+    const { params, app: { router } } = useContext()
+    const { deleteSlideDialog, overwritePresentationDialog, toHomescreenDialog } = useDialogs()
     const { savePresentation } = usePresentationRepository()
+    const presentationStore: PresentationStore = usePresentationStore()
     const state: any = reactive<State>({
       options: {
         usageStatistics: false,
@@ -162,26 +210,34 @@ export default defineComponent({
       slideContent: '',
       editorRef: null,
       showSavePanel: false,
-      showSidebar: true
+      showSlides: false
     })
 
     function newSlide (): void {
-      state.presentation.slides.splice(state.currentSlide + 1, 0, '# Slide\ncontent')
+      state.presentation.slides = [
+        ...state.presentation.slides.slice(0, state.currentSlide + 1),
+        '# Slide\ncontent',
+        ...state.presentation.slides.slice(state.currentSlide + 1)]
+
       state.currentSlide++
     }
 
     function saveSlideContent (): void {
       const content = state.editorRef.invoke('getMarkdown')
       state.presentation.slides[state.currentSlide] = content
+      presentationStore.savePresentation({ ...state.presentation })
+    }
+
+    function toHomescreen (): void {
+      presentationStore.presentation.value &&
+      presentationStore.presentation.value.id === state.presentation.id &&
+      presentationStore.presentation.value.versionNumber === state.presentation.versionNumber
+        ? toHomescreenDialog()
+        : router?.push('/')
     }
 
     function deleteSlide (): void {
       deleteSlideDialog(state.presentation.slides, state.currentSlide)
-    }
-
-    function openSavePanel (): void {
-      state.currentSlide = null
-      state.showSavePanel = true
     }
 
     function switchSlide (index: number): void {
@@ -197,14 +253,20 @@ export default defineComponent({
       }
     }
 
+    function openPreview (): void {
+      presentationStore.savePresentation({ ...state.presentation })
+      router?.push('/presentation/new/preview')
+    }
+
     return {
       ...toRefs(state),
       newSlide,
       saveSlideContent,
       deleteSlide,
       confirmSave,
-      openSavePanel,
-      switchSlide
+      switchSlide,
+      openPreview,
+      toHomescreen
     }
   }
 })

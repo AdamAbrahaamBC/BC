@@ -5,7 +5,7 @@ import { usePresentationRepository } from '~/composable/presentationRepository'
 import { PresentationEditable } from '~/models/presentation/PresentationEditable'
 
 export const useDialogs = () => {
-  const { app: { $axios } } = useContext()
+  const { app: { $axios, router } } = useContext()
   const { fetchUserData } = useFetchUserData()
   const { savePresentation } = usePresentationRepository()
 
@@ -57,5 +57,23 @@ export const useDialogs = () => {
     })
   }
 
-  return { deletePresentationDialog, deleteSlideDialog, overwritePresentationDialog }
+  const toHomescreenDialog = () => {
+    dialog.confirm({
+      title: 'Leaving editor',
+      message: 'Are you sure you want to leave the editor? You have <b>unsaved</b> changes!',
+      confirmText: 'Leave',
+      type: 'is-warning',
+      hasIcon: true,
+      onConfirm: () => {
+        router?.push('/')
+      }
+    })
+  }
+
+  return {
+    deletePresentationDialog,
+    deleteSlideDialog,
+    overwritePresentationDialog,
+    toHomescreenDialog
+  }
 }

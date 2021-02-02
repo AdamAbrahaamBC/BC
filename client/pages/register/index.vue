@@ -9,57 +9,59 @@
       <p>{{ error }}</p>
     </b-message>
 
-    <b-field label="First name" custom-class="has-text-gray">
-      <b-input
-        ref="firstNameRef"
-        v-model="userData.firstName"
-        type="text"
-        maxlength="30"
-        required
-      />
-    </b-field>
-    <b-field label="Last name" custom-class="has-text-gray">
-      <b-input
-        ref="lastNameRef"
-        v-model="userData.lastName"
-        type="text"
-        maxlength="30"
-        required
-      />
-    </b-field>
-    <b-field label="Email" custom-class="has-text-gray">
-      <b-input
-        ref="emailRef"
-        v-model="userData.email"
-        type="email"
-        maxlength="30"
-        required
-      />
-    </b-field>
-    <b-field label="Password" custom-class="has-text-gray">
-      <b-input
-        ref="passwordRef"
-        v-model="userData.password"
-        type="password"
-        password-reveal
-        required
-      />
-    </b-field>
+    <form v-if="!isLoading" @submit.prevent="onSubmit">
+      <b-field label="First name" custom-class="has-text-gray">
+        <b-input
+          ref="firstNameRef"
+          v-model="userData.firstName"
+          type="text"
+          maxlength="30"
+          required
+        />
+      </b-field>
+      <b-field label="Last name" custom-class="has-text-gray">
+        <b-input
+          ref="lastNameRef"
+          v-model="userData.lastName"
+          type="text"
+          maxlength="30"
+          required
+        />
+      </b-field>
+      <b-field label="Email" custom-class="has-text-gray">
+        <b-input
+          ref="emailRef"
+          v-model="userData.email"
+          type="email"
+          maxlength="30"
+          required
+        />
+      </b-field>
+      <b-field label="Password" custom-class="has-text-gray">
+        <b-input
+          ref="passwordRef"
+          v-model="userData.password"
+          type="password"
+          password-reveal
+          required
+        />
+      </b-field>
 
-    <div class="columns mt-5">
-      <div class="column">
-        <b-button tag="nuxt-link" to="/login" type="is-secondary has-text-primary has-text-weight-bold" expanded>
-          Login
-        </b-button>
+      <div class="columns mt-5">
+        <div class="column">
+          <b-button tag="nuxt-link" to="/login" type="is-secondary has-text-primary has-text-weight-bold" expanded>
+            Login
+          </b-button>
+        </div>
+        <div class="column">
+          <b-button native-type="submit" type="is-primary has-text-secondary has-text-weight-bold" expanded>
+            Sign Up
+          </b-button>
+        </div>
       </div>
-      <div class="column">
-        <b-button type="is-primary has-text-secondary has-text-weight-bold" expanded @click="onSubmit">
-          Sign Up
-        </b-button>
-      </div>
-    </div>
+    </form>
 
-    <b-loading v-model="isLoading" :is-full-page="true" :can-cancel="false" />
+    <Loader v-else />
   </div>
 </template>
 

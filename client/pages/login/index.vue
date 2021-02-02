@@ -9,39 +9,41 @@
       <p>{{ error }}</p>
     </b-message>
 
-    <b-field label="Email" custom-class="has-text-gray">
-      <b-input
-        ref="emailRef"
-        v-model="userData.email"
-        type="email"
-        maxlength="30"
-        required
-      />
-    </b-field>
-    <b-field label="Password" custom-class="has-text-gray">
-      <b-input
-        ref="passwordRef"
-        v-model="userData.password"
-        type="password"
-        password-reveal
-        required
-      />
-    </b-field>
+    <form v-if="!isLoading" @submit.prevent="onSubmit">
+      <b-field label="Email" custom-class="has-text-gray">
+        <b-input
+          ref="emailRef"
+          v-model="userData.email"
+          type="email"
+          maxlength="30"
+          required
+        />
+      </b-field>
+      <b-field label="Password" custom-class="has-text-gray">
+        <b-input
+          ref="passwordRef"
+          v-model="userData.password"
+          type="password"
+          password-reveal
+          required
+        />
+      </b-field>
 
-    <div class="columns mt-5">
-      <div class="column">
-        <b-button tag="nuxt-link" to="/register" type="is-secondary has-text-primary has-text-weight-bold" expanded>
-          Register
-        </b-button>
+      <div class="columns mt-5">
+        <div class="column">
+          <b-button tag="nuxt-link" to="/register" type="is-secondary has-text-primary has-text-weight-bold" expanded>
+            Register
+          </b-button>
+        </div>
+        <div class="column">
+          <b-button native-type="submit" type="is-primary has-text-secondary has-text-weight-bold" expanded>
+            Sign In!
+          </b-button>
+        </div>
       </div>
-      <div class="column">
-        <b-button type="is-primary has-text-secondary has-text-weight-bold" expanded @click="onSubmit">
-          Sign In!
-        </b-button>
-      </div>
-    </div>
+    </form>
 
-    <b-loading v-model="isLoading" :is-full-page="true" :can-cancel="false" />
+    <Loader v-else />
   </div>
 </template>
 

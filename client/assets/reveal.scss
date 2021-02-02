@@ -1,0 +1,13 @@
+@import '~/node_modules//reveal.js/css/reveal.scss';
+@import '~/node_modules/reveal.js/dist/theme/white.css';
+
+#app {
+  height: 100vh;
+  padding: 32px 32px 0px 32px;
+}
+
+.reveal .slides {
+  text-align: left !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
