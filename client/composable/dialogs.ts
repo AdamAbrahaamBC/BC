@@ -30,7 +30,7 @@ export const useDialogs = () => {
     })
   }
 
-  const deleteSlideDialog = (slides: string[], currentSlide: number) => {
+  const deleteSlideDialog = (presentation: PresentationEditable, currentSlide: number) => {
     dialog.confirm({
       title: 'Deleting slide',
       message: 'Are you sure you want to <b>delete</b> this slide? This action cannot be undone.',
@@ -38,8 +38,8 @@ export const useDialogs = () => {
       type: 'is-danger',
       hasIcon: true,
       onConfirm: () => {
-        slides = [...slides.splice(currentSlide, 1)]
-        currentSlide = currentSlide >= slides.length ? slides.length - 1 : currentSlide
+        presentation.slides = presentation.slides.slice(0, currentSlide).concat(presentation.slides.slice(currentSlide + 1, presentation.slides.length))
+        currentSlide = currentSlide >= presentation.slides.length ? presentation.slides.length - 1 : currentSlide
       }
     })
   }
@@ -47,7 +47,7 @@ export const useDialogs = () => {
   const overwritePresentationDialog = (presentation: PresentationEditable) => {
     dialog.confirm({
       title: 'Overwriting presentation',
-      message: 'This version is already saved. Are you sure you want to <b>overwright</b> it? This action cannot be undone.',
+      message: 'This version is already saved. Are you sure you want to <b>overwrite</b> it? This action cannot be undone.',
       confirmText: 'Save',
       type: 'is-warning',
       hasIcon: true,

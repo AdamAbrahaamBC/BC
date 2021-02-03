@@ -11,12 +11,17 @@
 }
 
 .menu {
-  height: 120px;
+  height: 190px;
+}
+
+.grid-slide {
+  overflow: hidden;
+  height: 13vw;
 }
 
 .slide-list {
   overflow-y: auto;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 190px);
 }
 
 .presentation-slide {
