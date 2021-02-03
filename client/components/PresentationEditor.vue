@@ -9,125 +9,36 @@
         :overlay="false"
         :reduce="!showSlides"
       >
-        <div v-if="showSlides">
-          <div class="menu mx-3 pt-2">
-            <b-button class="tile is-child" type="is-primary" @click="showSlides = false">
-              <b-icon
-                icon="chevron-left"
-                type="is-blue"
-              />
-            </b-button>
-            <div class="tile is-ancestor my-0">
-              <div class="tile is-parent is-8">
-                <b-button class="tile is-child" outlined type="is-blue" @click="newSlide">
-                  <b-icon
-                    icon="card-plus-outline"
-                  />
-                </b-button>
-              </div>
-              <div class="tile is-parent">
-                <b-button class="tile is-child" type="is-danger" :disabled="presentation.slides.length === 1" @click="deleteSlide">
-                  <b-icon
-                    icon="delete"
-                    type="is-secondary"
-                  />
-                </b-button>
-              </div>
-            </div>
-          </div>
+        <EditorSlideList
+          v-if="showSlides"
+          :slides="presentation.slides"
+          :current-slide="currentSlide"
+          @hide-slides="showSlides = false"
+          @new-slide="newSlide"
+          @delete-slide="deleteSlide"
+          @switch-slide="switchSlide($event)"
+          @open-grid-view="openGridView"
+          @slides-changed="presentation.slides = $event"
+        />
 
-          <draggable
-            :list="presentation.slides"
-            class="slide-list"
-            ghost-class="ghost"
-          >
-            <div v-for="(slide, index) in presentation.slides" :key="slide + index" class="px-5 py-5" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
-              <div class="box presentation-slide px-1 py-1 clickable" @click="switchSlide(index)">
-                <viewer :initial-value="slide" />
-              </div>
-            </div>
-          </draggable>
-        </div>
-
-        <div v-else class="has-text-centered">
-          <b-tooltip
-            label="Home"
-            type="is-secondary"
-            position="is-bottom"
-            class="my-5"
-          >
-            <b-button
-              size="is-large"
-              class="is-primary"
-              @click="toHomescreen"
-            >
-              <b-icon
-                size="is-medium"
-                icon="home"
-                type="is-blue"
-              />
-            </b-button>
-          </b-tooltip>
-          <b-tooltip
-            label="Save"
-            type="is-success"
-            position="is-bottom"
-            class="my-5"
-          >
-            <b-button
-              size="is-large"
-              type="is-success"
-              @click="showSavePanel = !showSavePanel"
-            >
-              <b-icon
-                size="is-medium"
-                icon="content-save"
-                type="is-secondary"
-              />
-            </b-button>
-          </b-tooltip>
-          <b-tooltip
-            label="Preview"
-            type="is-secondary"
-            position="is-bottom"
-            class="my-5"
-          >
-            <b-button
-              size="is-large"
-              type="is-blue"
-              @click="openPreview"
-            >
-              <b-icon
-                size="is-medium"
-                icon="eye"
-                type="is-primary"
-              />
-            </b-button>
-          </b-tooltip>
-          <b-tooltip
-            label="Slides"
-            type="is-secondary"
-            position="is-bottom"
-            class="my-5"
-          >
-            <b-button
-              size="is-large"
-              type="is-blue"
-              outlined
-              @click="showSlides = true"
-            >
-              <b-icon
-                size="is-medium"
-                icon="buffer"
-              />
-            </b-button>
-          </b-tooltip>
-        </div>
+        <EditorMenu
+          v-else
+          @to-homescreen="toHomescreen"
+          @toggle-save-panel="showSavePanel = !showSavePanel"
+          @open-preview="openPreview"
+          @show-slides="showSlides = true"
+        />
       </b-sidebar>
 
       <div class="px-6 py-6 width-100 has-background-secondary">
+        <EditorSlideGrid
+          v-if="showGridView"
+          :slides="presentation.slides"
+          @switch-slide="switchSlide($event)"
+          @slides-changed="presentation.slides = $event"
+        />
         <editor
-          v-if="currentSlide !== null && presentation.slides.length && !showSavePanel"
+          v-else-if="currentSlide !== null && presentation.slides.length && !showSavePanel"
           :key="currentSlide"
           ref="editorRef"
           :options="options"
@@ -171,6 +82,9 @@ import { PresentationEditable } from '~/models/presentation/PresentationEditable
 import { useDialogs } from '~/composable/dialogs'
 import { usePresentationRepository } from '~/composable/presentationRepository'
 import { PresentationStore, usePresentationStore } from '~/composable/presentationStore'
+import EditorSlideList from '~/components/EditorSlideList.vue'
+import EditorMenu from '~/components/EditorMenu.vue'
+import EditorSlideGrid from '~/components/EditorSlideGrid.vue'
 
 interface State {
   options: {
@@ -183,9 +97,12 @@ interface State {
   editorRef: any
   showSavePanel: boolean
   showSlides: boolean
+  showGridView: boolean
 }
 
 export default defineComponent({
+  components: { EditorSlideList, EditorMenu, EditorSlideGrid },
+
   layout: 'editor',
 
   props: {
@@ -210,7 +127,8 @@ export default defineComponent({
       slideContent: '',
       editorRef: null,
       showSavePanel: false,
-      showSlides: false
+      showSlides: false,
+      showGridView: false
     })
 
     function newSlide (): void {
@@ -237,12 +155,13 @@ export default defineComponent({
     }
 
     function deleteSlide (): void {
-      deleteSlideDialog(state.presentation.slides, state.currentSlide)
+      deleteSlideDialog(state.presentation, state.currentSlide)
     }
 
     function switchSlide (index: number): void {
       state.currentSlide = index
       state.showSavePanel = false
+      state.showGridView = false
     }
 
     function confirmSave (): void {
@@ -258,6 +177,11 @@ export default defineComponent({
       router?.push('/presentation/new/preview')
     }
 
+    function openGridView (): void {
+      state.showGridView = true
+      state.showSlides = false
+    }
+
     return {
       ...toRefs(state),
       newSlide,
@@ -266,7 +190,8 @@ export default defineComponent({
       confirmSave,
       switchSlide,
       openPreview,
-      toHomescreen
+      toHomescreen,
+      openGridView
     }
   }
 })
