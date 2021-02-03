@@ -38,7 +38,7 @@ export const useDialogs = () => {
       type: 'is-danger',
       hasIcon: true,
       onConfirm: () => {
-        slides.splice(currentSlide, 1)
+        slides = [...slides.splice(currentSlide, 1)]
         currentSlide = currentSlide >= slides.length ? slides.length - 1 : currentSlide
       }
     })
