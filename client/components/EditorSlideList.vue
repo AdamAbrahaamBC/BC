@@ -17,14 +17,14 @@
           </b-button>
         </div>
         <div class="tile is-parent">
-          <b-button class="tile is-child" outlined type="is-blue" @click="$emit('new-slide')">
+          <b-button class="tile is-child" outlined type="is-blue" @click="copyCurrentSlide">
             <b-icon
               icon="content-copy"
             />
           </b-button>
         </div>
         <div class="tile is-parent">
-          <b-button class="tile is-child" outlined type="is-blue" @click="$emit('new-slide')">
+          <b-button class="tile is-child" :disabled="!copiedSlide" outlined type="is-blue" @click="pasteSlide">
             <b-icon
               icon="book-plus-multiple-outline"
             />
@@ -34,7 +34,7 @@
 
       <div class="tile is-ancestor my-0">
         <div class="tile is-parent is-8">
-          <b-button class="tile is-child" type="is-blue" @click="$emit('new-slide')">
+          <b-button class="tile is-child" type="is-blue" @click="newSlide">
             <b-icon
               icon="card-plus-outline"
             />
@@ -55,6 +55,7 @@
       v-model="draggableSlides"
       class="slide-list"
       ghost-class="ghost"
+      @change="handleChange"
     >
       <div v-for="(slide, index) in slides" :key="slide + index" class="px-5 py-5" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
         <div class="box presentation-slide px-1 py-1 clickable" @click="$emit('switch-slide', index)">
@@ -67,11 +68,13 @@
 
 <script lang="ts">
 import { defineComponent, computed } from '@nuxtjs/composition-api'
+import { usePresentationStore, PresentationStore } from '~/composable/presentationStore'
+import { useToasts } from '~/composable/toasts'
 
 export default defineComponent({
   props: {
     slides: {
-      type: Array as () => String[],
+      type: Array as () => string[],
       required: true
     },
     currentSlide: {
@@ -80,16 +83,60 @@ export default defineComponent({
     }
   },
 
-  emits: ['hide-slides', 'new-slide', 'delete-slide', 'switch-slide', 'open-grid-view', 'slides-changed'],
+  emits: ['hide-slides', 'change-current-slide', 'delete-slide', 'switch-slide', 'open-grid-view', 'slides-changed'],
 
   setup (props, { emit }) {
+    const { successToast } = useToasts()
+    const presentationStore: PresentationStore = usePresentationStore()
+
     const draggableSlides = computed({
       get: () => props.slides,
       set: value => emit('slides-changed', value)
     })
 
+    const copiedSlide = computed<string | null>(() => presentationStore.copiedSlide.value)
+
+    function newSlide (): void {
+      draggableSlides.value = [
+        ...props.slides.slice(0, props.currentSlide + 1),
+        '# Slide\ncontent',
+        ...props.slides.slice(props.currentSlide + 1)]
+
+      emit('change-current-slide', props.currentSlide + 1)
+    }
+
+    function handleChange (slide: any): void {
+      if (slide && slide.moved) {
+        emit('change-current-slide', slide.moved.newIndex)
+      }
+    }
+
+    function pasteSlide (): void {
+      if (!copiedSlide.value) {
+        return
+      }
+
+      draggableSlides.value = [
+        ...props.slides.slice(0, props.currentSlide + 1),
+        copiedSlide.value,
+        ...props.slides.slice(props.currentSlide + 1)]
+
+      emit('change-current-slide', props.currentSlide + 1)
+      successToast('Pasted!')
+    }
+
+    function copyCurrentSlide (): void {
+      presentationStore.copySlide(props.slides[props.currentSlide])
+      successToast('Copied!')
+    }
+
     return {
-      draggableSlides
+      draggableSlides,
+      newSlide,
+      handleChange,
+      copyCurrentSlide,
+      pasteSlide,
+      copiedSlide
     }
   }
 })
