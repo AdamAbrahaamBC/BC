@@ -1,11 +1,12 @@
 import { ref, useContext } from '@nuxtjs/composition-api'
-import { ToastProgrammatic as Toast } from 'buefy'
 import { PresentationEditable } from '~/models/presentation/PresentationEditable'
 import { PresentationDetail, PresentationVersion } from '~/models/presentation/PresentationDetail'
 import { PresentationStore, usePresentationStore } from '~/composable/presentationStore'
+import { useToasts } from '~/composable/toasts'
 
 export const usePresentationRepository = () => {
   const { app: { $axios } } = useContext()
+  const { successToast } = useToasts()
   const presentationStore: PresentationStore = usePresentationStore()
   const presentation = ref<PresentationEditable | null>(null)
 
@@ -31,7 +32,7 @@ export const usePresentationRepository = () => {
 
   const savePresentation = (presentation: PresentationEditable) => {
     $axios.post('/presentation', { presentation })
-    Toast.open({ message: 'Successfully saved!', type: 'is-success', position: 'is-bottom' })
+    successToast('Successfully saved!')
     presentationStore.removePresentation()
   }
 

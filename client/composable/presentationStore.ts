@@ -34,7 +34,15 @@ export class PresentationStore {
     return this.store.dispatch(PresentationNamespace + ActionTypes.RemovePresentation)
   }
 
+  public copySlide (slide: string): Promise<void> {
+    return this.store.dispatch(PresentationNamespace + ActionTypes.CopySlide, slide)
+  }
+
   public get presentation (): ComputedRef<PresentationEditable | null> {
     return computed<PresentationEditable | null>(() => this.store.getters[PresentationNamespace + GetterTypes.getPresentation])
+  }
+
+  public get copiedSlide (): ComputedRef<string | null> {
+    return computed<string | null>(() => this.store.getters[PresentationNamespace + GetterTypes.getCopiedSlide])
   }
 }

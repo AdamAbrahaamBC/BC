@@ -3,7 +3,7 @@ import { Plugin } from '@nuxt/types'
 
 const persistedStore: Plugin = ({ store }) => {
   createPersistedState({
-    paths: ['presentation.presentation']
+    paths: ['presentation.presentation', 'presentation.copiedSlide']
   })(store)
 }
 

@@ -7,7 +7,8 @@ import { PresentationEditable } from '~/models/presentation/PresentationEditable
 // Actions
 export enum ActionTypes {
   SavePresentation = 'SAVE_PRESENTATION',
-  RemovePresentation = 'REMOVE_PRESENTATION'
+  RemovePresentation = 'REMOVE_PRESENTATION',
+  CopySlide = 'COPY_SLIDE'
 }
 
 type ActionAugments = Omit<ActionContext<PresentationState, RootState>, 'commit'> & {
@@ -20,6 +21,7 @@ type ActionAugments = Omit<ActionContext<PresentationState, RootState>, 'commit'
 export type Actions = {
   [ActionTypes.SavePresentation] (this: Store<RootState>, context: ActionAugments, presentation: PresentationEditable): void
   [ActionTypes.RemovePresentation] (this: Store<RootState>, context: ActionAugments): void
+  [ActionTypes.CopySlide] (this: Store<RootState>, context: ActionAugments, slide: string): void
 }
 
 const actions: ActionTree<PresentationState, RootState> & Actions = {
@@ -29,6 +31,10 @@ const actions: ActionTree<PresentationState, RootState> & Actions = {
 
   [ActionTypes.RemovePresentation] (this: Store<RootState>, context: ActionAugments): void {
     context.commit(MutationType.SetPresentation, null)
+  },
+
+  [ActionTypes.CopySlide] (this: Store<RootState>, context: ActionAugments, slide: string): void {
+    context.commit(MutationType.SetCopiedSlide, slide)
   }
 }
 

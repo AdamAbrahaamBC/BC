@@ -14,11 +14,11 @@
           :slides="presentation.slides"
           :current-slide="currentSlide"
           @hide-slides="showSlides = false"
-          @new-slide="newSlide"
           @delete-slide="deleteSlide"
           @switch-slide="switchSlide($event)"
           @open-grid-view="openGridView"
           @slides-changed="presentation.slides = $event"
+          @change-current-slide="currentSlide = $event"
         />
 
         <EditorMenu
@@ -131,15 +131,6 @@ export default defineComponent({
       showGridView: false
     })
 
-    function newSlide (): void {
-      state.presentation.slides = [
-        ...state.presentation.slides.slice(0, state.currentSlide + 1),
-        '# Slide\ncontent',
-        ...state.presentation.slides.slice(state.currentSlide + 1)]
-
-      state.currentSlide++
-    }
-
     function saveSlideContent (): void {
       const content = state.editorRef.invoke('getMarkdown')
       state.presentation.slides[state.currentSlide] = content
@@ -184,7 +175,6 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      newSlide,
       saveSlideContent,
       deleteSlide,
       confirmSave,
