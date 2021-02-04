@@ -59,9 +59,10 @@ class UserRepository {
   public async updatePresentationSummary(user: IUser, presentation: IPresentationRequest): Promise<IUser> {
     const presentationSummary: IPresentationSummary = user.presentations.find(x => x.presentationId.toString() === presentation.id)
     presentationSummary.title = presentation.title
-    presentationSummary.lastEdited = dayjs().format('DD.MM.YYYY HH:MM'),
+    presentationSummary.lastEdited = dayjs().format('DD.MM.YYYY HH:MM')
+    presentationSummary.currentVersion = presentation.versionNumber > presentationSummary.currentVersion ? presentation.versionNumber : presentationSummary.currentVersion
 
-      user.markModified('presentations')
+    user.markModified('presentations')
 
     return user.save()
   }

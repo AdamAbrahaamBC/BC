@@ -47,30 +47,11 @@
           class="box px-2 py-2"
           @blur="saveSlideContent"
         />
-        <div v-else-if="showSavePanel" class="columns is-centered is-vcentered height-100">
-          <div class="box has-background-primary" style="width: 50vw">
-            <b-field label="Presentation title" custom-class="has-text-white">
-              <b-input
-                v-model="presentation.title"
-                maxlength="30"
-                required
-              />
-            </b-field>
-            <b-field label="Version" custom-class="has-text-white">
-              <b-numberinput v-model="presentation.versionNumber" type="is-white" />
-            </b-field>
-            <b-field label="Version description" custom-class="has-text-white">
-              <b-input
-                v-model="presentation.description"
-                maxlength="100"
-                type="textarea"
-              />
-            </b-field>
-            <b-button class="is-success width-100" icon-left="content-save-outline" @click="confirmSave">
-              SAVE PRESENTATION
-            </b-button>
-          </div>
-        </div>
+        <PresentationSavePanel
+          v-else-if="showSavePanel"
+          :presentation="presentation"
+          @presentation-changed="presentation = $event"
+        />
       </div>
     </section>
   </div>
@@ -80,11 +61,11 @@
 import { defineComponent, reactive, toRefs, useContext } from '@nuxtjs/composition-api'
 import { PresentationEditable } from '~/models/presentation/PresentationEditable'
 import { useDialogs } from '~/composable/dialogs'
-import { usePresentationRepository } from '~/composable/presentationRepository'
 import { PresentationStore, usePresentationStore } from '~/composable/presentationStore'
 import EditorSlideList from '~/components/EditorSlideList.vue'
 import EditorMenu from '~/components/EditorMenu.vue'
 import EditorSlideGrid from '~/components/EditorSlideGrid.vue'
+import PresentationSavePanel from '~/components/PresentationSavePanel.vue'
 
 interface State {
   options: {
@@ -101,7 +82,7 @@ interface State {
 }
 
 export default defineComponent({
-  components: { EditorSlideList, EditorMenu, EditorSlideGrid },
+  components: { EditorSlideList, EditorMenu, EditorSlideGrid, PresentationSavePanel },
 
   layout: 'editor',
 
@@ -113,9 +94,8 @@ export default defineComponent({
   },
 
   setup (props: any) {
-    const { params, app: { router } } = useContext()
-    const { deleteSlideDialog, overwritePresentationDialog, toHomescreenDialog } = useDialogs()
-    const { savePresentation } = usePresentationRepository()
+    const { app: { router } } = useContext()
+    const { deleteSlideDialog, toHomescreenDialog } = useDialogs()
     const presentationStore: PresentationStore = usePresentationStore()
     const state: any = reactive<State>({
       options: {
@@ -155,14 +135,6 @@ export default defineComponent({
       state.showGridView = false
     }
 
-    function confirmSave (): void {
-      if (state.presentation.versionNumber <= Number(params.value.version)) {
-        overwritePresentationDialog(state.presentation)
-      } else {
-        savePresentation(state.presentation)
-      }
-    }
-
     function openPreview (): void {
       presentationStore.savePresentation({ ...state.presentation })
       router?.push('/presentation/new/preview')
@@ -177,7 +149,6 @@ export default defineComponent({
       ...toRefs(state),
       saveSlideContent,
       deleteSlide,
-      confirmSave,
       switchSlide,
       openPreview,
       toHomescreen,

@@ -22,7 +22,8 @@ export const usePresentationRepository = () => {
             title: presentationDetail.title,
             description: versionDetail.description,
             versionNumber: versionDetail.number,
-            slides: versionDetail.slides
+            slides: versionDetail.slides,
+            versionCount: presentationDetail.versions.length
           }
         }
 
