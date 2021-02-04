@@ -20,7 +20,8 @@ export default defineComponent({
         title: 'New Presentation',
         description: '',
         versionNumber: 1,
-        slides: ['# Slide\ncontent']
+        slides: ['# Slide\ncontent'],
+        versionCount: 1
       }
     )
 
