@@ -15,6 +15,29 @@ class PresentationRepository {
     await Presentation.findByIdAndDelete(presentationId)
   }
 
+  public async deleteVersion(user: IUser, presentationId: string, version: number): Promise<void> {
+    const presentation = await Presentation.findById(presentationId)
+    if (!presentation) {
+      return Promise.resolve()
+    }
+
+    if (presentation.versions.length === 1) {
+      this.deletePresentation(user, presentationId)
+    } else {
+      presentation.versions = presentation.versions.filter((v: IVersion) => v.number !== version)
+      presentation.versions = presentation.versions.map((v: IVersion) => {
+        if (v.number > version) {
+          v.number--
+        }
+
+        return v
+      })
+
+      await userRepository.updatePresentationSummaryCurrentVersion(user, presentationId, presentation.versions.length)
+      presentation.save()
+    }
+  }
+
   public async newPresentation(user: IUser, presentationData: IPresentationRequest): Promise<IPresentation> {
     const version: IVersion = {
       number: presentationData.versionNumber,

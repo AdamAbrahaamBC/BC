@@ -5,8 +5,6 @@ import passwordHasher from '../services/passwordHasher';
 import * as jwt from 'jsonwebtoken';
 import dayjs from 'dayjs'
 
-const saltRounds: number = 10
-
 class UserRepository {
 
   public async getUserById(userId: string): Promise<IUser> {
@@ -61,6 +59,15 @@ class UserRepository {
     presentationSummary.title = presentation.title
     presentationSummary.lastEdited = dayjs().format('DD.MM.YYYY HH:MM')
     presentationSummary.currentVersion = presentation.versionNumber > presentationSummary.currentVersion ? presentation.versionNumber : presentationSummary.currentVersion
+
+    user.markModified('presentations')
+
+    return user.save()
+  }
+
+  public async updatePresentationSummaryCurrentVersion(user: IUser, presentationId: string, newCurrentVersion: number): Promise<IUser> {
+    const presentationSummary: IPresentationSummary = user.presentations.find(x => x.presentationId.toString() === presentationId)
+    presentationSummary.currentVersion = newCurrentVersion
 
     user.markModified('presentations')
 

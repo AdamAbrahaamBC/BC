@@ -26,6 +26,7 @@
           @to-homescreen="toHomescreen"
           @toggle-save-panel="showSavePanel = !showSavePanel"
           @open-preview="openPreview"
+          @download="download"
           @show-slides="showSlides = true"
         />
       </b-sidebar>
@@ -137,7 +138,18 @@ export default defineComponent({
 
     function openPreview (): void {
       presentationStore.savePresentation({ ...state.presentation })
-      router?.push('/presentation/new/preview')
+      router?.push(
+        state.presentation.id
+          ? `/presentation/${state.presentation.id}/${state.presentation.versionNumber}/preview`
+          : '/presentation/new/preview')
+    }
+
+    function download (): void {
+      presentationStore.savePresentation({ ...state.presentation })
+      router?.push(
+        state.presentation.id
+          ? `/presentation/${state.presentation.id}/${state.presentation.versionNumber}/preview?print-pdf`
+          : '/presentation/new/preview?print-pdf')
     }
 
     function openGridView (): void {
@@ -151,6 +163,7 @@ export default defineComponent({
       deleteSlide,
       switchSlide,
       openPreview,
+      download,
       toHomescreen,
       openGridView
     }

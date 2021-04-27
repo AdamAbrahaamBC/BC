@@ -9,6 +9,7 @@ export const usePresentationRepository = () => {
   const { successToast } = useToasts()
   const presentationStore: PresentationStore = usePresentationStore()
   const presentation = ref<PresentationEditable | null>(null)
+  const presentationSummaryDetail = ref<PresentationDetail | null>(null)
 
   const loadPresentation = async (id: string, version: number): Promise<PresentationEditable | null> => {
     return await $axios.get('/presentation', { params: { id } })
@@ -31,15 +32,31 @@ export const usePresentationRepository = () => {
       })
   }
 
+  const loadPresentationSummaryDetails = async (id: string): Promise<void> => {
+    presentationSummaryDetail.value = null
+
+    return await $axios.get('/presentation', { params: { id } })
+      .then((response) => {
+        presentationSummaryDetail.value = response.data
+      })
+  }
+
   const savePresentation = (presentation: PresentationEditable) => {
-    $axios.post('/presentation', { presentation })
-    successToast('Successfully saved!')
-    presentationStore.removePresentation()
+    $axios.post('/presentation', { presentation }).then((response) => {
+      if (response.data.newId) {
+        presentation.id = response.data.newId
+      }
+
+      successToast('Successfully saved!')
+      presentationStore.removePresentation()
+    })
   }
 
   return {
     presentation,
+    presentationSummaryDetail,
     savePresentation,
-    loadPresentation
+    loadPresentation,
+    loadPresentationSummaryDetails
   }
 }

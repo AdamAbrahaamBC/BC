@@ -16,13 +16,14 @@ export class PresentationController {
 
       const presentation: IPresentationRequest = req.body.presentation
 
+      let savedPresentation: IPresentation = null
       if (presentation.id) {
         await presentationRepository.updatePresentation(user, presentation)
       } else {
-        await presentationRepository.newPresentation(user, presentation)
+        savedPresentation = await presentationRepository.newPresentation(user, presentation)
       }
 
-      res.status(201)
+      res.status(201).json({ newId: savedPresentation._id })
     } catch {
       res.status(500)
     }
@@ -53,6 +54,25 @@ export class PresentationController {
 
       const presentationId: string = req.query.id as string
       presentationRepository.deletePresentation(user, presentationId)
+
+      res.status(200).json("DELETED")
+    } catch {
+      res.status(500)
+    }
+  }
+
+  public async deleteVersion(req: Request, res: Response): Promise<void> {
+    try {
+      const user: IUser = await userRepository.getUserById(res.locals.jwtPayload.userId)
+      if (!user) {
+        res.status(404).json("User not found!")
+        return
+      }
+
+      const presentationId: string = req.query.id as string
+      const version: number = Number(req.query.version)
+
+      presentationRepository.deleteVersion(user, presentationId, version)
 
       res.status(200).json("DELETED")
     } catch {

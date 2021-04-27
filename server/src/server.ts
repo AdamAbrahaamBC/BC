@@ -50,7 +50,7 @@ class Server {
       await mongoose.connect(process.env.MONGODB_URI, {
         keepAlive: true,
         useNewUrlParser: true,
-        useFindAndModify: true,
+        useFindAndModify: false,
         useUnifiedTopology: true,
         useCreateIndex: true,
       })
