@@ -8,7 +8,7 @@ import { usePresentationFetch } from '~/composable/fetchPresentation'
 import PresentationViewer from '~/components/PresentationViewer.vue'
 
 export default defineComponent({
-
+  auth: false,
   components: { PresentationViewer },
 
   layout: 'editor',

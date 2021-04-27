@@ -39,10 +39,44 @@
     </div>
     <div class="column is-2">
       <b-button
-        type="is-danger float-right"
+        tag="nuxt-link"
+        type="is-primary float-right"
+        class="is-hidden-mobile"
         expanded
-        icon-right="delete"
-        @click.stop="deletePresentation"
+        outlined
+        icon-left="pencil"
+        :to="`/presentation/${presentationId}/${selectedVersion}`"
+      >
+        EDIT v{{ selectedVersion }}
+      </b-button>
+      <b-button
+        tag="nuxt-link"
+        type="is-primary float-right"
+        class="mt-3"
+        expanded
+        outlined
+        icon-left="eye"
+        :to="`/presentation/${presentationId}/${selectedVersion}/preview`"
+      >
+        VIEW v{{ selectedVersion }}
+      </b-button>
+      <b-button
+        tag="nuxt-link"
+        type="is-primary float-right"
+        class="mt-3"
+        expanded
+        outlined
+        icon-left="download"
+        :to="`/presentation/${presentationId}/${selectedVersion}/preview?print-pdf`"
+      >
+        DOWNLOAD v{{ selectedVersion }}
+      </b-button>
+      <b-button
+        type="is-danger float-right"
+        class="mt-3"
+        expanded
+        icon-left="delete"
+        @click.stop="$emit('delete-version', selectedVersion)"
       >
         DELETE v{{ selectedVersion }}
       </b-button>
@@ -56,6 +90,10 @@ import { PresentationVersion } from '../models/presentation/PresentationDetail'
 
 export default defineComponent({
   props: {
+    presentationId: {
+      type: String,
+      required: true
+    },
     versionDetail: {
       type: Object as () => PresentationVersion,
       required: true
@@ -65,7 +103,7 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['version-changed'],
+  emits: ['version-changed', 'delete-version'],
 
   setup (props, { emit }) {
     const currentSlide = ref(0)

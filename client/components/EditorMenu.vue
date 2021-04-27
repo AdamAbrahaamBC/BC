@@ -55,6 +55,24 @@
       </b-button>
     </b-tooltip>
     <b-tooltip
+      label="Export"
+      type="is-secondary"
+      position="is-bottom"
+      class="my-5"
+    >
+      <b-button
+        size="is-large"
+        type="is-blue"
+        @click="$emit('download')"
+      >
+        <b-icon
+          size="is-medium"
+          icon="download"
+          type="is-primary"
+        />
+      </b-button>
+    </b-tooltip>
+    <b-tooltip
       label="Slides"
       type="is-secondary"
       position="is-bottom"
@@ -79,7 +97,7 @@
 import { defineComponent } from '@nuxtjs/composition-api'
 
 export default defineComponent({
-  emits: ['to-homescreen', 'toggle-save-panel', 'open-preview', 'show-slides'],
+  emits: ['to-homescreen', 'toggle-save-panel', 'open-preview', 'show-slides', 'download'],
 
   setup () {
     return {}

@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import { IUser, IUserRequest } from "../models/userModels";
 import userRepository from "../repository/userRepository";
 
-const saltRounds: number = 10
-
 export class AuthController {
 
   public async register(req: Request, res: Response): Promise<void> {

@@ -30,6 +30,27 @@ export const useDialogs = () => {
     })
   }
 
+  const deleteVersionDialog = (version: number, presentationId: string, presentationInstance: any) => {
+    dialog.prompt({
+      title: 'Deleting version',
+      message: `Are you sure you want to <b>delete</b> this version? This action cannot be undone.\nTo delete type <b>v${version}</b> below.`,
+      inputAttrs: {
+        placeholder: `v${version}`
+      },
+      confirmText: 'Delete',
+      type: 'is-danger',
+      hasIcon: true,
+      closeOnConfirm: false,
+      onConfirm: async (value, { close }) => {
+        if (value === `v${version}`) {
+          await $axios.delete('/presentation/version', { params: { id: presentationId, version } })
+          presentationInstance.loadPresentationSummaryDetails(presentationId)
+          close()
+        }
+      }
+    })
+  }
+
   const deleteSlideDialog = (presentation: PresentationEditable, currentSlide: number) => {
     dialog.confirm({
       title: 'Deleting slide',
@@ -72,6 +93,7 @@ export const useDialogs = () => {
 
   return {
     deletePresentationDialog,
+    deleteVersionDialog,
     deleteSlideDialog,
     overwritePresentationDialog,
     toHomescreenDialog
