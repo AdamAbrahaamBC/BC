@@ -1,5 +1,5 @@
 import { DialogProgrammatic as dialog } from 'buefy'
-import { useContext } from '@nuxtjs/composition-api'
+import { useContext, Ref } from '@nuxtjs/composition-api'
 import { useFetchUserData } from '~/composable/fetchUserData'
 import { usePresentationRepository } from '~/composable/presentationRepository'
 import { PresentationEditable } from '~/models/presentation/PresentationEditable'
@@ -30,7 +30,7 @@ export const useDialogs = () => {
     })
   }
 
-  const deleteVersionDialog = (version: number, presentationId: string, presentationInstance: any) => {
+  const deleteVersionDialog = (version: number, presentationId: string, selectedVersion: Ref<number>, presentationInstance: any) => {
     dialog.prompt({
       title: 'Deleting version',
       message: `Are you sure you want to <b>delete</b> this version? This action cannot be undone.\nTo delete type <b>v${version}</b> below.`,
@@ -44,6 +44,7 @@ export const useDialogs = () => {
       onConfirm: async (value, { close }) => {
         if (value === `v${version}`) {
           await $axios.delete('/presentation/version', { params: { id: presentationId, version } })
+          selectedVersion.value = selectedVersion.value === 1 ? selectedVersion.value : selectedVersion.value - 1
           presentationInstance.loadPresentationSummaryDetails(presentationId)
           close()
         }
@@ -51,7 +52,7 @@ export const useDialogs = () => {
     })
   }
 
-  const deleteSlideDialog = (presentation: PresentationEditable, currentSlide: number) => {
+  const deleteSlideDialog = (state: any) => {
     dialog.confirm({
       title: 'Deleting slide',
       message: 'Are you sure you want to <b>delete</b> this slide? This action cannot be undone.',
@@ -59,8 +60,8 @@ export const useDialogs = () => {
       type: 'is-danger',
       hasIcon: true,
       onConfirm: () => {
-        presentation.slides = presentation.slides.slice(0, currentSlide).concat(presentation.slides.slice(currentSlide + 1, presentation.slides.length))
-        currentSlide = currentSlide >= presentation.slides.length ? presentation.slides.length - 1 : currentSlide
+        state.presentation.slides = state.presentation.slides.slice(0, state.currentSlide).concat(state.presentation.slides.slice(state.currentSlide + 1, state.presentation.slides.length))
+        state.currentSlide = state.currentSlide < 1 ? state.currentSlide : state.currentSlide - 1
       }
     })
   }

@@ -3,7 +3,7 @@
     <b-navbar centered spaced type="is-primary">
       <template #end>
         <b-navbar-item tag="div">
-          <b-button type="is-blue has-text-primary" @click="$auth.logout()">
+          <b-button data-test="logoutButton" type="is-blue has-text-primary" @click="$auth.logout()">
             <h2 class="subtitle has-text-primary">
               Logout
             </h2>

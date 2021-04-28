@@ -16,7 +16,7 @@
         </div>
 
         <div>
-          <b-button type="is-danger" icon-right="delete" @click.stop="deletePresentation">
+          <b-button data-test="deletePresentationButton" type="is-danger" icon-right="delete" @click.stop="deletePresentation">
             DELETE
           </b-button>
         </div>
@@ -84,7 +84,7 @@ export default defineComponent({
         return
       }
 
-      deleteVersionDialog(version, props.presentation.presentationId, presentationRepository)
+      deleteVersionDialog(version, props.presentation.presentationId, selectedVersion, presentationRepository)
     }
 
     return {

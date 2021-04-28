@@ -19,7 +19,7 @@
     <div class="column is-6">
       <div>
         <strong>Versions:</strong><br>
-        <span v-for="version in versions" :key="version" class="mr-2" @click="versionChanged(version)">
+        <span v-for="version in versions" :key="version" data-test="versions" class="mr-2" @click="versionChanged(version)">
           <b-tag
             :type="version === versionDetail.number ? 'is-blue' : 'is-secondary'"
             :class="version === versionDetail.number ? 'has-text-primary' : 'has-text-primary'"
@@ -43,37 +43,41 @@
         type="is-primary float-right"
         class="is-hidden-mobile"
         expanded
+        data-test="editVersionButton"
         outlined
         icon-left="pencil"
         :to="`/presentation/${presentationId}/${selectedVersion}`"
       >
-        EDIT v{{ selectedVersion }}
+        EDIT
       </b-button>
       <b-button
         tag="nuxt-link"
         type="is-primary float-right"
         class="mt-3"
+        data-test="viewVersionButton"
         expanded
         outlined
         icon-left="eye"
         :to="`/presentation/${presentationId}/${selectedVersion}/preview`"
       >
-        VIEW v{{ selectedVersion }}
+        VIEW
       </b-button>
       <b-button
         tag="nuxt-link"
         type="is-primary float-right"
         class="mt-3"
+        data-test="downloadVersionButton"
         expanded
         outlined
         icon-left="download"
         :to="`/presentation/${presentationId}/${selectedVersion}/preview?print-pdf`"
       >
-        DOWNLOAD v{{ selectedVersion }}
+        DOWNLOAD
       </b-button>
       <b-button
         type="is-danger float-right"
         class="mt-3"
+        data-test="deleteVersionButton"
         expanded
         icon-left="delete"
         @click.stop="$emit('delete-version', selectedVersion)"

@@ -15,7 +15,7 @@ class PresentationRepository {
     await Presentation.findByIdAndDelete(presentationId)
   }
 
-  public async deleteVersion(user: IUser, presentationId: string, version: number): Promise<void> {
+  public async deleteVersion(user: IUser, presentationId: string, version: number): Promise<IPresentation | void> {
     const presentation = await Presentation.findById(presentationId)
     if (!presentation) {
       return Promise.resolve()
@@ -34,7 +34,7 @@ class PresentationRepository {
       })
 
       await userRepository.updatePresentationSummaryCurrentVersion(user, presentationId, presentation.versions.length)
-      presentation.save()
+      return presentation.save()
     }
   }
 

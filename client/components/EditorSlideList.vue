@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="menu mx-3 pt-2">
-      <b-button class="tile is-child" type="is-primary" @click="$emit('hide-slides')">
+      <b-button data-test="closeSlidePanelButton" class="tile is-child" type="is-primary" @click="$emit('hide-slides')">
         <b-icon
           icon="chevron-left"
           type="is-blue"
@@ -10,21 +10,28 @@
 
       <div class="tile is-ancestor my-0">
         <div class="tile is-parent">
-          <b-button class="tile is-child" outlined type="is-blue" @click="$emit('open-grid-view')">
+          <b-button data-test="openGridViewButton" class="tile is-child" outlined type="is-blue" @click="$emit('open-grid-view')">
             <b-icon
               icon="view-grid-outline"
             />
           </b-button>
         </div>
         <div class="tile is-parent">
-          <b-button class="tile is-child" outlined type="is-blue" @click="copyCurrentSlide">
+          <b-button data-test="copySlideButton" class="tile is-child" outlined type="is-blue" @click="copyCurrentSlide">
             <b-icon
               icon="content-copy"
             />
           </b-button>
         </div>
         <div class="tile is-parent">
-          <b-button class="tile is-child" :disabled="!copiedSlide" outlined type="is-blue" @click="pasteSlide">
+          <b-button
+            data-test="pasteSlideButton"
+            class="tile is-child"
+            :disabled="!copiedSlide"
+            outlined
+            type="is-blue"
+            @click="pasteSlide"
+          >
             <b-icon
               icon="book-plus-multiple-outline"
             />
@@ -34,14 +41,14 @@
 
       <div class="tile is-ancestor my-0">
         <div class="tile is-parent is-8">
-          <b-button class="tile is-child" type="is-blue" @click="newSlide">
+          <b-button data-test="newSlideButton" class="tile is-child" type="is-blue" @click="newSlide">
             <b-icon
               icon="card-plus-outline"
             />
           </b-button>
         </div>
         <div class="tile is-parent">
-          <b-button class="tile is-child" type="is-danger" :disabled="slides.length === 1" @click="$emit('delete-slide')">
+          <b-button data-test="deleteSlideButton" class="tile is-child" type="is-danger" :disabled="slides.length === 1" @click="$emit('delete-slide')">
             <b-icon
               icon="delete"
               type="is-secondary"
@@ -57,7 +64,7 @@
       ghost-class="ghost"
       @change="handleChange"
     >
-      <div v-for="(slide, index) in slides" :key="slide + index" class="px-5 py-5" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
+      <div v-for="(slide, index) in slides" :key="slide + index" data-test="slides" class="px-5 py-5" :class="{'has-background-secondary': currentSlide !== null && index === currentSlide}">
         <div class="box presentation-slide px-1 py-1 clickable" @click="$emit('switch-slide', index)">
           <viewer :initial-value="slide" />
         </div>

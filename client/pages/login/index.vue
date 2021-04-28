@@ -4,7 +4,12 @@
       <strong class="is-uppercase has-text-gray is-size-4">Login</strong>
     </div>
 
-    <b-message v-if="error.length" type="is-danger" has-icon>
+    <b-message
+      v-if="error.length"
+      data-test="loginError"
+      type="is-danger"
+      has-icon
+    >
       Error:
       <p>{{ error }}</p>
     </b-message>
@@ -13,6 +18,7 @@
       <b-field label="Email" custom-class="has-text-gray">
         <b-input
           v-model="userData.email"
+          data-test="email"
           type="email"
           maxlength="30"
           required
@@ -21,6 +27,7 @@
       <b-field label="Password" custom-class="has-text-gray">
         <b-input
           v-model="userData.password"
+          data-test="password"
           type="password"
           password-reveal
           required
@@ -34,7 +41,12 @@
           </b-button>
         </div>
         <div class="column">
-          <b-button native-type="submit" type="is-primary has-text-secondary has-text-weight-bold" expanded>
+          <b-button
+            data-test="submitButton"
+            native-type="submit"
+            type="is-primary has-text-secondary has-text-weight-bold"
+            expanded
+          >
             Sign In!
           </b-button>
         </div>

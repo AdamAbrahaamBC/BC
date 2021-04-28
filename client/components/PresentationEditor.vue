@@ -24,7 +24,7 @@
         <EditorMenu
           v-else
           @to-homescreen="toHomescreen"
-          @toggle-save-panel="showSavePanel = !showSavePanel"
+          @toggle-save-panel="toggleSavePanel"
           @open-preview="openPreview"
           @download="download"
           @show-slides="showSlides = true"
@@ -42,6 +42,7 @@
           v-else-if="currentSlide !== null && presentation.slides.length && !showSavePanel"
           :key="currentSlide"
           ref="editorRef"
+          data-test="editor"
           :options="options"
           :initial-value="presentation.slides[currentSlide]"
           height="100%"
@@ -127,7 +128,7 @@ export default defineComponent({
     }
 
     function deleteSlide (): void {
-      deleteSlideDialog(state.presentation, state.currentSlide)
+      deleteSlideDialog(state)
     }
 
     function switchSlide (index: number): void {
@@ -157,6 +158,11 @@ export default defineComponent({
       state.showSlides = false
     }
 
+    function toggleSavePanel (): void {
+      state.showGridView = false
+      state.showSavePanel = !state.showSavePanel
+    }
+
     return {
       ...toRefs(state),
       saveSlideContent,
@@ -165,7 +171,8 @@ export default defineComponent({
       openPreview,
       download,
       toHomescreen,
-      openGridView
+      openGridView,
+      toggleSavePanel
     }
   }
 })
