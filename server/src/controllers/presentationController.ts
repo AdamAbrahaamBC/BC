@@ -23,7 +23,7 @@ export class PresentationController {
         savedPresentation = await presentationRepository.newPresentation(user, presentation)
       }
 
-      res.status(201).json({ newId: savedPresentation._id })
+      res.status(201).json({ newId: savedPresentation ? savedPresentation._id : null })
     } catch {
       res.status(500)
     }
@@ -72,7 +72,7 @@ export class PresentationController {
       const presentationId: string = req.query.id as string
       const version: number = Number(req.query.version)
 
-      presentationRepository.deleteVersion(user, presentationId, version)
+      await presentationRepository.deleteVersion(user, presentationId, version)
 
       res.status(200).json("DELETED")
     } catch {

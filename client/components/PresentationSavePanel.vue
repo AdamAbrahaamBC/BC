@@ -6,6 +6,7 @@
           v-model="presentationDetails.title"
           maxlength="30"
           required
+          data-test="titleInput"
         />
       </b-field>
       <b-field label="Version description" custom-class="has-text-white">
@@ -13,17 +14,18 @@
           v-model="presentationDetails.description"
           maxlength="100"
           type="textarea"
+          data-test="descriptionInput"
         />
       </b-field>
       <div class="tile is-ancestor my-0">
         <div class="tile is-parent">
-          <b-button v-if="presentationDetails.id" outlined class="tile is-child is-success has-text-weight-bold " @click="overwriteVersion">
+          <b-button v-if="presentationDetails.id" data-test="overwriteButton" outlined class="tile is-child is-success has-text-weight-bold " @click="overwriteVersion">
             OVERWRITE THIS VERSION
           </b-button>
         </div>
 
         <div class="tile is-parent">
-          <b-button class="tile is-child is-success has-text-weight-bold " @click="saveNewVersion">
+          <b-button data-test="saveNewButton" class="tile is-child is-success has-text-weight-bold " @click="saveNewVersion">
             SAVE AS NEW VERSION
           </b-button>
         </div>

@@ -9,7 +9,7 @@
           Create amazing presentations using <span class="has-text-blue">Markdown</span>, a lightweight markup language for creating formatted text, with our easy-to-use editor
         </h3>
         <div class="has-text-centered is-hidden-mobile">
-          <b-button tag="nuxt-link" to="/presentation/new" type="is-blue" size="is-large has-text-weight-bold has-text-primary">
+          <b-button data-test="createNewButton" tag="nuxt-link" to="/presentation/new" type="is-blue" size="is-large has-text-weight-bold has-text-primary">
             CREATE NEW
           </b-button>
         </div>
@@ -27,6 +27,7 @@
           <PresentationSummary
             v-for="presentation in $auth.user.presentations"
             :key="presentation.presentationId"
+            data-test="presentationSummaries"
             :presentation="presentation"
           />
         </div>

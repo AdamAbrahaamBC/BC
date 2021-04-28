@@ -7,6 +7,7 @@
       class="my-5"
     >
       <b-button
+        data-test="homeButton"
         size="is-large"
         class="is-primary"
         @click="$emit('to-homescreen')"
@@ -25,6 +26,7 @@
       class="my-5"
     >
       <b-button
+        data-test="saveButton"
         size="is-large"
         type="is-success"
         @click="$emit('toggle-save-panel')"
@@ -43,6 +45,7 @@
       class="my-5"
     >
       <b-button
+        data-test="previewButton"
         size="is-large"
         type="is-blue"
         @click="$emit('open-preview')"
@@ -61,6 +64,7 @@
       class="my-5"
     >
       <b-button
+        data-test="exportButton"
         size="is-large"
         type="is-blue"
         @click="$emit('download')"
@@ -79,6 +83,7 @@
       class="my-5"
     >
       <b-button
+        data-test="slidesButton"
         size="is-large"
         type="is-blue"
         outlined

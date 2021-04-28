@@ -3,6 +3,7 @@
     v-model="draggableSlides"
     ghost-class="ghost"
     tag="div"
+    data-test="editorSlideGrid"
     class="columns is-multiline"
   >
     <div v-for="(slide, index) in slides" :key="slide + index" class="column is-3">
