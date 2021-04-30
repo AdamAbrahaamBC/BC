@@ -133,5 +133,8 @@ describe('Presentation', function () {
     cy.get('[data-test="deletePresentationButton"]').click()
     cy.get('.input').type('Nový názov')
     cy.get('button').contains('Delete').click()
+
+    // User has no presentation
+    cy.contains('You have no presentations yet, click the button above to create your first one')
   })
 })

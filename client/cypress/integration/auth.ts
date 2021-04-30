@@ -1,5 +1,17 @@
 describe('Auth', function () {
-  it('Login', function () {
+  it('Unsuccessful login', function () {
+    cy.visit('/')
+    cy.url().should('include', '/login')
+    cy.contains('Login')
+
+    cy.get('[data-test="email"]').type('bad@email.com')
+    cy.get('[data-test="password"]').type('vutbr')
+    cy.get('[data-test="submitButton"]').click()
+
+    cy.get('[data-test="loginError"]').should('be.visible')
+  })
+
+  it('Successful login', function () {
     cy.visit('/')
     cy.url().should('include', '/login')
     cy.contains('Login')
