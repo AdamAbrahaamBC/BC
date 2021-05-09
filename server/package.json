@@ -5,9 +5,8 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "nodemon -x ts-node ./src/server.ts",
-    "start": "nodemon",
-    "build": "tsoa spec-and-routes && tsoa swagger && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx ts-node dist/server.js",
+    "build": "npx tsc -p ."
   },
   "author": "Adam Abrahám",
   "license": "ISC",
