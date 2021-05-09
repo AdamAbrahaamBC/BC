@@ -1,4 +1,6 @@
-# Projekt vyžaduje spúštacie prostredie [Node.js](https://nodejs.org)
+# Spúštací manuál
+
+## Projekt vyžaduje spúštacie prostredie [Node.js](https://nodejs.org)
 
 ## Server
 ``` bash
