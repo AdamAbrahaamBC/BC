@@ -18,9 +18,6 @@ $ npm run start
 $ npm run dev
 ```
 
-
-Pri spustení projektu z pamäťového média, ktoré už obsahuje build, stačí ***npm run start***.
-
 ## Klient
 ``` bash
 # nutný je prechod do repozitára klienta z monorepozitára!!
@@ -38,8 +35,6 @@ $ npm run start
 # spustenie vývojového prostredia s hot-reload (IBA PRE VÝVOJ!)
 $ npm run dev
 ```
-
-Pri spustení projektu z pamäťového média, ktoré už obsahuje build, stačí ***npm run start***.
 
 ## Cypress E2E testy
 ``` bash
