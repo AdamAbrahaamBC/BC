@@ -4,3 +4,4 @@ declare module '*.vue' {
 }
 
 declare module 'reveal.js';
+declare module '@toast-ui/vue-editor';
